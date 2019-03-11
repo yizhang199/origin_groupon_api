@@ -107,19 +107,19 @@ class ProductHelper
             array_push($responseData, $dto);
         }
         # generate category for solod out products
-        $noStockProducts = Product::where("quantity", "<=", 0)->get();
-        $noStockData["category_id"] = 9999999;
-        $noStockData["name"] = $language_id == 1 ? "Sold Out" : "售罄";
-        $noStockData["products"] = $noStockProducts;
-        foreach ($noStockProducts as $product) {
-            $productDescription = $product->descriptions()->where('language_id', $language_id)->first();
-            if ($productDescription === null) {
-                $productDescription = $product->descriptions()->first();
-            }
-            $product['name'] = $productDescription->name;
-            $product["options"] = array();
-        }
-        array_push($responseData, $noStockData);
+        // $noStockProducts = Product::where("quantity", "<=", 0)->get();
+        // $noStockData["category_id"] = 9999999;
+        // $noStockData["name"] = $language_id == 1 ? "Sold Out" : "售罄";
+        // $noStockData["products"] = $noStockProducts;
+        // foreach ($noStockProducts as $product) {
+        //     $productDescription = $product->descriptions()->where('language_id', $language_id)->first();
+        //     if ($productDescription === null) {
+        //         $productDescription = $product->descriptions()->first();
+        //     }
+        //     $product['name'] = $productDescription->name;
+        //     $product["options"] = array();
+        // }
+        // array_push($responseData, $noStockData);
 
         return $responseData;
     }
@@ -240,7 +240,7 @@ class ProductHelper
         $user_group_id = 2;
         $sql = $product->discounts()
             ->where('customer_group_id', $user_group_id)
-            ->where('quantity', '>', '0')
+            ->where('quantity', '>=', '0')
             ->where('date_start', '<=', $today)
             ->where('date_end', '>=', $today);
         $discounts = $sql->get();
