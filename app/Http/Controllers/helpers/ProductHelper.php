@@ -40,6 +40,7 @@ class ProductHelper
                 $discountInfo = self::makeDiscountInfo($product, $user_group_id);
                 $product["price"] = $discountInfo["price"];
                 $product["isDiscount"] = $discountInfo["status"];
+                $product["discountQuantity"] = $discountInfo["quantity"];
 
                 # make product name
                 $productDescription = $product->descriptions()->where('language_id', $language_id)->first();
@@ -226,8 +227,8 @@ class ProductHelper
     public function updateProductStatus($request, $product_id)
     {
         $product = Product::find($product_id);
-        $request->product = json_decode(json_encode($request->product));
-        $product->status = $request->product->status;
+        $requestProduct = json_decode(json_encode($request->product));
+        $product->status = $requestProduct->status;
         $product->save();
     }
 
@@ -236,7 +237,7 @@ class ProductHelper
     {
         $dt = new \DateTime("now", new \DateTimeZone('Australia/Sydney'));
         $today = $dt->format("Y-m-d");
-
+        $user_group_id = 2;
         $sql = $product->discounts()
             ->where('customer_group_id', $user_group_id)
             ->where('quantity', '>', '0')
@@ -245,15 +246,17 @@ class ProductHelper
         $discounts = $sql->get();
 
         if (count($discounts) > 0) {
+            $result = $sql
+                ->orderBy("priority", "desc")
+                ->first();
             return array(
-                "price" => $sql
-                    ->orderBy("priority", "desc")
-                    ->first()->price,
+                "price" => $result->price,
+                "quantity" => $result->quantity,
                 "status" => true,
             );
         }
 
-        return array("price" => $product["price"], "status" => false);
+        return array("price" => $product["price"], "quantity" => 0, "status" => false);
     }
 
 }

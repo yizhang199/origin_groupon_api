@@ -44,7 +44,6 @@ class ProductController extends Controller
         $responseData = $this->helper->getProductsList($language_id, $status, $search_string, $user_group_id);
 
         # return response
-
         return response()->json($responseData, 200);
     }
 
@@ -70,9 +69,9 @@ class ProductController extends Controller
         //2. create oc_product
         $newProduct = Product::create([
             'price' => $product->price,
-            'quantity' => $product->quantity,
+            'quantity' => isset($product->quantity) ? $product->quantity : 999,
             "sort_order" => $product->sort_order,
-            "stock_status_id" => $product->stock_status_id,
+            "stock_status_id" => isset($product->stock_status_id) ? $product->stock_status_id : 500,
         ]);
 
         $product_id = $newProduct->product_id;
@@ -124,7 +123,7 @@ class ProductController extends Controller
             $product = json_decode(json_encode($request->product));
             ProductDiscount::create([
                 'product_id' => $product->product_id,
-                'quantity' => $product->discountQuantity,
+                'quantity' => $product->stock_status_id,
                 'price' => $product->discountPrice,
                 'date_start' => $product->date_start,
                 'date_end' => $product->date_end,
@@ -135,8 +134,9 @@ class ProductController extends Controller
         $search_string = isset($request->search_string) ? $request->search_string : "";
         $status = isset($request->status) ? $request->status : 0;
         $language_id = isset($request->language_id) ? $request->language_id : 2;
+        $user_group_id = 2;
 
-        $products = self::getProductsList($language_id, $status, $search_string);
+        $products = $this->helper->getProductsList($language_id, $status, $search_string, $user_group_id);
         return response()->json(compact("products"), 201);
     }
 
@@ -173,6 +173,7 @@ class ProductController extends Controller
         $product = Product::find($product_id);
         $product->price = $request->product->price;
         $product->quantity = $request->product->quantity;
+        $product->sort_order = $request->product->sort_order;
 
         //How To:: upload image React && Laravel
         if ($request->get("file")) {
@@ -248,7 +249,7 @@ class ProductController extends Controller
 
         $status = isset($request->status) ? $request->status : 0;
         $language_id = isset($request->language_id) ? $request->language_id : 2;
-        $response_array = self::getProductsList($language_id, $status, $search_string);
+        $response_array = $this->helper->getProductsList($language_id, $status, $search_string, 2);
 
         return response()->json($response_array, 200);
 
@@ -281,12 +282,13 @@ class ProductController extends Controller
         $language_id = isset($request->language_id) ? $request->language_id : 2;
         $search_string = isset($request->search_string) ? $request->search_string : "";
         $property = isset($request->property) ? $request->property : "status";
-        $status = $request->product->status === 1 ? 0 : 1;
+        $product = json_decode(json_encode($request->product));
+        $status = $product->status === 1 ? 0 : 1;
 
         # call function
         switch ($property) {
             case 'status':
-                $this->helper->updateProductStatus($product_id, $request);
+                $this->helper->updateProductStatus($request, $product_id);
                 break;
             default:
                 # code...
@@ -294,7 +296,7 @@ class ProductController extends Controller
         }
 
         # make return response object
-        $response_array = self::getProductsList($language_id, $status, $search_string);
+        $response_array = $this->helper->getProductsList($language_id, $status, $search_string, 2);
 
         return response()->json($response_array, 200);
     }
