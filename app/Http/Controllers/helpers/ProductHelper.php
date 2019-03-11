@@ -53,9 +53,10 @@ class ProductHelper
                 $image_path = config("app.baseurl") . $product["image"];
 
                 if ($product["image"] === null || !file_exists($_SERVER['DOCUMENT_ROOT'] . $image_path)) {
-                    $product["image"] = '/images/products/default_product.jpg';
+                    $product["image"] = url('/') . '/images/products/default_product.jpg';
 
                 }
+                $product["image"] = url('/') . $product["image"];
 
                 if ($search_string !== "" && !(strpos($product['name'], $search_string) !== false)) {
                     $products = $products->filter(function ($item) use ($product) {
@@ -136,7 +137,9 @@ class ProductHelper
         $responseData = array();
 //1. fetch product
         $product = Product::find($product_id);
+        $product->image = url('/') . $product->image;
         $responseData['product'] = $product;
+
 //2. add details
         //2.1 descriptions
         $responseData['descriptions'] = $product->descriptions()->get();
