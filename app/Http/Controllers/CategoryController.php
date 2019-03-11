@@ -63,6 +63,10 @@ class CategoryController extends Controller
         }
 
         $category = Category::create();
+        if (isset($request->sort_order)) {
+            $category->sort_order = $request->sort_order;
+            $category->save();
+        }
         if ($request->get("file")) {
             $image = $request->get("file");
             $name = "$category->category_id.jpeg";
@@ -119,7 +123,7 @@ class CategoryController extends Controller
     public function getCategoryList($language_id)
     {
         $response_array = array();
-        $categories = Category::all();
+        $categories = Category::orderBy("sort_order", "desc")->get();
 
         foreach ($categories as $category) {
             $item = array();

@@ -82,7 +82,8 @@ class ProductController extends Controller
             \Image::make($request->get('file'))->save(public_path('images/products/') . $name);
             $newProduct->image = "/images/products/$name";
         }
-
+        // $path = public_path('images/products/');
+        // return response()->json(compact("path"),200);
         $newProduct->save();
 
         //3. create oc_product_description [multiple descriptions should be created, as user may entry all names for different languages]

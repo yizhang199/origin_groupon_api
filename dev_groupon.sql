@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.3
+-- version 4.8.4
 -- https://www.phpmyadmin.net/
 --
 -- 主机： 127.0.0.1
--- 生成日期： 2019-03-05 02:41:09
--- 服务器版本： 10.1.36-MariaDB
--- PHP 版本： 7.0.32
+-- 生成日期： 2019-03-11 21:40:30
+-- 服务器版本： 10.1.37-MariaDB
+-- PHP 版本： 7.0.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -1337,7 +1337,9 @@ INSERT INTO `oc_order` (`order_id`, `invoice_no`, `invoice_prefix`, `store_id`, 
 (18, 123, 'MELTIANFU', 1, '', '', 1, 1, '', '', '', '', '2019-03-10', '', '', '', '', '', '', '', '', '', 1, '', 1, '', '', 'Paypal', '1', '', '', '', '', '', '', '', '', 1, '', 1, '', '', '', '1', '', '115.8000', 2, 1, '1.0000', 1, 'abc', 1, 1, 'AUD', '1.10000000', '', '', '', '', '2019-02-22 00:00:00', '2019-02-22 00:00:00'),
 (19, 123, 'MELTIANFU', 1, '', '', 1, 1, '', '', '', '', '2019-03-12', '', '', '', '', '', '', '', '', '', 1, '', 1, '', '', 'Paypal', '1', '', '', '', '', '', '', '', '', 1, '', 1, '', '', '', '1', '', '100.8000', 2, 1, '1.0000', 1, 'abc', 1, 1, 'AUD', '1.10000000', '', '', '', '', '2019-02-26 00:00:00', '2019-02-26 00:00:00'),
 (38, 201952791, 'MELTIANFU', 1, '', '', 1, 1, '', '', '', '', '2019-03-06T01:23:18.000Z', '', '', '', '', '', '', '', '', '', 1, '', 1, '', '', 'Paypal', '1', '', '', '', '', '', '', '', '', 1, '', 1, '', '', '', '1', 'test comments,\nsome comments', '15.8000', 1, 1, '1.0000', 1, 'abc', 1, 1, 'AUD', '1.10000000', '', '', '', '', '2019-03-05 00:00:00', '2019-03-05 00:00:00'),
-(37, 2019211715, 'MELTIANFU', 1, '', '', 1, 1, '', '', '', '', '2019-03-05', '', '', '', '', '', '', '', '', '', 1, '', 1, '', '', 'Paypal', '1', '', '', '', '', '', '', '', '', 1, '', 1, '', '', '', '1', '', '19.8000', 1, 1, '1.0000', 1, 'abc', 1, 1, 'AUD', '1.10000000', '', '', '', '', '2019-02-21 00:00:00', '2019-02-21 00:00:00');
+(37, 2019211715, 'MELTIANFU', 1, '', '', 1, 1, '', '', '', '', '2019-03-05', '', '', '', '', '', '', '', '', '', 1, '', 1, '', '', 'Paypal', '1', '', '', '', '', '', '', '', '', 1, '', 1, '', '', '', '1', '', '19.8000', 1, 1, '1.0000', 1, 'abc', 1, 1, 'AUD', '1.10000000', '', '', '', '', '2019-02-21 00:00:00', '2019-02-21 00:00:00'),
+(39, 2019102313, 'MELTIANFU', 1, '', '', 1, 1, '', '', '', '', '2019-03-05T13:00:00.000Z', '', '', '', '', '', '', '', '', '', 1, '', 1, '', '', 'WECHAT', '1', '', '', '', '', '', '', '', '', 1, '', 1, '', '', '', '1', 'fd', '15.8000', 1, 1, '1.0000', 1, 'abc', 1, 1, 'AUD', '1.10000000', '', '', '', '', '2019-03-10 00:00:00', '2019-03-10 00:00:00'),
+(40, 201910269, 'MELTIANFU', 1, '', '', 1, 1, '', '', '', '', '2019-03-05T13:00:00.000Z', '', '', '', '', '', '', '', '', '', 1, '', 1, '', '', 'WECHAT', '1', '', '', '', '', '', '', '', '', 1, '', 1, '', '', '', '1', 'fd', '15.8000', 1, 1, '1.0000', 1, 'abc', 1, 1, 'AUD', '1.10000000', '', '', '', '', '2019-03-10 00:00:00', '2019-03-10 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -1406,7 +1408,9 @@ INSERT INTO `oc_order_product` (`order_product_id`, `order_id`, `product_id`, `n
 (16, 15, 2, '', '', 1, '15.8000', '15.8000', '0.0000', 0),
 (7, 6, 1, '', '', 10, '16.8000', '168.0000', '0.0000', 0),
 (39, 37, 1, '', '', 1, '19.8000', '19.8000', '0.0000', 0),
-(40, 38, 4, '', '', 1, '15.8000', '15.8000', '0.0000', 0);
+(40, 38, 4, '', '', 1, '15.8000', '15.8000', '0.0000', 0),
+(41, 39, 4, '', '', 1, '15.8000', '15.8000', '0.0000', 0),
+(42, 40, 4, '', '', 1, '15.8000', '15.8000', '0.0000', 0);
 
 -- --------------------------------------------------------
 
@@ -1602,9 +1606,9 @@ INSERT INTO `oc_product` (`product_id`, `model`, `sku`, `upc`, `ean`, `jan`, `is
 (17, '', '', '', '', '', '', '', '', 98, 150, '/images/products/17.jpeg', 0, 1, '10.8000', 0, 0, '0000-00-00', '0.00000000', 0, '0.00000000', '0.00000000', '0.00000000', 0, 1, 1, 0, 0, 0, '2019-01-22 00:00:00', '2019-01-22 00:00:00'),
 (18, '', '', '', '', '', '', '', '', 99, 150, '/images/products/18.jpeg', 0, 1, '10.8000', 0, 0, '0000-00-00', '0.00000000', 0, '0.00000000', '0.00000000', '0.00000000', 0, 1, 1, 0, 0, 0, '2019-01-22 00:00:00', '2019-01-22 00:00:00'),
 (1, '', '', '', '', '', '', '', '', 14, 150, '/images/products/1.jpeg', 0, 1, '19.8000', 0, 0, '0000-00-00', '0.00000000', 0, '0.00000000', '0.00000000', '0.00000000', 0, 1, 1, 0, 0, 0, '2019-01-22 00:00:00', '2019-01-22 00:00:00'),
-(2, '', '', '', '', '', '', '', '', 131, 150, '/images/products/2.jpeg', 0, 1, '19.8000', 0, 0, '0000-00-00', '0.00000000', 0, '0.00000000', '0.00000000', '0.00000000', 0, 1, 1, 0, 0, 0, '2019-01-22 00:00:00', '2019-01-22 00:00:00'),
-(3, '', '', '', '', '', '', '', '', 10, 150, '/images/products/3.jpeg', 0, 1, '25.8000', 0, 0, '0000-00-00', '0.00000000', 0, '0.00000000', '0.00000000', '0.00000000', 0, 1, 1, 0, 0, 0, '2019-01-22 00:00:00', '2019-01-22 00:00:00'),
-(4, '', '', '', '', '', '', '', '', 93, 150, '/images/products/4.jpeg', 0, 1, '15.8000', 0, 0, '0000-00-00', '0.00000000', 0, '0.00000000', '0.00000000', '0.00000000', 0, 1, 1, 0, 0, 0, '2019-01-22 00:00:00', '2019-01-22 00:00:00'),
+(2, '', '', '', '', '', '', '', '', 131, 150, '/images/products/2.jpeg', 0, 1, '19.8000', 0, 0, '0000-00-00', '0.00000000', 0, '0.00000000', '0.00000000', '0.00000000', 0, 1, 1, 10, 0, 0, '2019-01-22 00:00:00', '2019-01-22 00:00:00'),
+(3, '', '', '', '', '', '', '', '', 10, 150, '/images/products/3.jpeg', 0, 1, '25.8000', 0, 0, '0000-00-00', '0.00000000', 0, '0.00000000', '0.00000000', '0.00000000', 0, 1, 1, 11, 0, 0, '2019-01-22 00:00:00', '2019-01-22 00:00:00'),
+(4, '', '', '', '', '', '', '', '', 92, 150, '/images/products/4.jpeg', 0, 1, '15.8000', 0, 0, '0000-00-00', '0.00000000', 0, '0.00000000', '0.00000000', '0.00000000', 0, 1, 1, 0, 0, 0, '2019-01-22 00:00:00', '2019-01-22 00:00:00'),
 (5, '', '', '', '', '', '', '', '', 92, 150, '/images/products/5.jpeg', 0, 1, '12.8000', 0, 0, '0000-00-00', '0.00000000', 0, '0.00000000', '0.00000000', '0.00000000', 0, 1, 1, 0, 0, 0, '2019-01-22 00:00:00', '2019-01-22 00:00:00'),
 (6, '', '', '', '', '', '', '', '', 99, 150, '/images/products/6.jpeg', 0, 1, '12.8000', 0, 0, '0000-00-00', '0.00000000', 0, '0.00000000', '0.00000000', '0.00000000', 0, 1, 1, 0, 0, 0, '2019-01-22 00:00:00', '2019-01-22 00:00:00'),
 (19, '', '', '', '', '', '', '', '', 99, 150, '/images/products/19.jpeg', 0, 1, '10.8000', 0, 0, '0000-00-00', '0.00000000', 0, '0.00000000', '0.00000000', '0.00000000', 0, 1, 1, 0, 0, 0, '2019-01-22 00:00:00', '2019-01-22 00:00:00'),
@@ -1613,7 +1617,10 @@ INSERT INTO `oc_product` (`product_id`, `model`, `sku`, `upc`, `ean`, `jan`, `is
 (24, '', '', '', '', '', '', '', '', 99, 150, '/images/products/24.jpeg', 0, 1, '2.8000', 0, 0, '0000-00-00', '0.00000000', 0, '0.00000000', '0.00000000', '0.00000000', 0, 1, 1, 0, 0, 0, '2019-01-22 00:00:00', '2019-01-22 00:00:00'),
 (28, '', '', '', '', '', '', '', '', 200, 200, '', 0, 1, '999.0000', 0, 1, '1900-10-11', '12.80000000', 1, '0.00000000', '0.00000000', '0.00000000', 0, 0, 1, 50, 1, 1, '1900-10-11 00:00:00', '1900-10-11 00:00:00'),
 (29, '', '', '', '', '', '', '', '', 555, 5555, '', 0, 1, '55.0000', 0, 1, '1900-10-11', '12.80000000', 1, '0.00000000', '0.00000000', '0.00000000', 0, 0, 1, 55, 1, 1, '1900-10-11 00:00:00', '1900-10-11 00:00:00'),
-(30, '', '', '', '', '', '', '', '', 33, 333, '', 0, 1, '33.0000', 0, 1, '1900-10-11', '12.80000000', 1, '0.00000000', '0.00000000', '0.00000000', 0, 0, 1, 33, 1, 1, '1900-10-11 00:00:00', '1900-10-11 00:00:00');
+(30, '', '', '', '', '', '', '', '', 33, 333, '', 0, 1, '33.0000', 0, 1, '1900-10-11', '12.80000000', 1, '0.00000000', '0.00000000', '0.00000000', 0, 0, 1, 33, 1, 1, '1900-10-11 00:00:00', '1900-10-11 00:00:00'),
+(31, '', '', '', '', '', '', '', '', 999, 20, '', 0, 1, '5.0000', 0, 1, '1900-10-11', '12.80000000', 1, '0.00000000', '0.00000000', '0.00000000', 0, 0, 1, 20, 1, 1, '1900-10-11 00:00:00', '1900-10-11 00:00:00'),
+(32, '', '', '', '', '', '', '', '', 999, 500, '', 0, 1, '121.0000', 0, 1, '1900-10-11', '12.80000000', 1, '0.00000000', '0.00000000', '0.00000000', 0, 0, 1, 22, 1, 1, '1900-10-11 00:00:00', '1900-10-11 00:00:00'),
+(33, '', '', '', '', '', '', '', '', 999, 500, '/images/products/33.jpeg', 0, 1, '121.0000', 0, 1, '1900-10-11', '12.80000000', 1, '0.00000000', '0.00000000', '0.00000000', 0, 0, 1, 22, 1, 1, '1900-10-11 00:00:00', '1900-10-11 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -1759,7 +1766,11 @@ INSERT INTO `oc_product_description` (`product_id`, `language_id`, `name`, `desc
 (28, 2, '试验品123', '', '', '', '', ''),
 (28, 1, 'test item', '', '', '', '', ''),
 (30, 2, '麻辣小龙虾', '', '', '', '', ''),
-(30, 1, 'ma la xiao long xia', '', '', '', '', '');
+(30, 1, 'ma la xiao long xia', '', '', '', '', ''),
+(31, 2, '鸭梨', '', '', '', '', ''),
+(31, 1, 'pear', '', '', '', '', ''),
+(33, 2, '中文名', '', '', '', '', ''),
+(33, 1, '英文名', '', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -1777,6 +1788,14 @@ CREATE TABLE `oc_product_discount` (
   `date_start` date NOT NULL DEFAULT '0000-00-00',
   `date_end` date NOT NULL DEFAULT '0000-00-00'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- 转存表中的数据 `oc_product_discount`
+--
+
+INSERT INTO `oc_product_discount` (`product_discount_id`, `product_id`, `customer_group_id`, `quantity`, `priority`, `price`, `date_start`, `date_end`) VALUES
+(1, 1, 2, 0, 1, '10.0000', '2019-03-10', '2019-03-16'),
+(2, 1, 2, 0, 2, '12.0000', '2019-03-10', '2019-03-16');
 
 -- --------------------------------------------------------
 
@@ -1823,7 +1842,8 @@ CREATE TABLE `oc_product_option` (
 INSERT INTO `oc_product_option` (`product_option_id`, `product_id`, `option_id`, `value`, `required`) VALUES
 (17, 1, 2, '', 1),
 (16, 1, 1, '', 1),
-(15, 2, 2, '', 1);
+(15, 2, 2, '', 1),
+(18, 33, 2, '', 1);
 
 -- --------------------------------------------------------
 
@@ -1886,15 +1906,18 @@ INSERT INTO `oc_product_option_value` (`product_option_value_id`, `product_optio
 (35, 14, 1, 2, 4, 999, 1, '0.0000', '$', 0, 'P', '12.20000000', 'G'),
 (36, 14, 1, 2, 5, 999, 1, '0.0000', '$', 0, 'P', '12.20000000', 'G'),
 (37, 14, 1, 2, 6, 999, 1, '0.0000', '$', 0, 'P', '12.20000000', 'G'),
-(70, 15, 2, 2, 4, 999, 1, '0.0000', '$', 0, 'P', '12.20000000', 'G'),
-(69, 15, 2, 2, 5, 999, 1, '0.0000', '$', 0, 'P', '12.20000000', 'G'),
-(68, 15, 2, 2, 6, 999, 1, '0.0000', '$', 0, 'P', '12.20000000', 'G'),
+(127, 15, 2, 2, 6, 999, 1, '0.0000', '$', 0, 'P', '12.20000000', 'G'),
+(126, 15, 2, 2, 5, 999, 1, '0.0000', '$', 0, 'P', '12.20000000', 'G'),
+(125, 15, 2, 2, 4, 999, 1, '0.0000', '$', 0, 'P', '12.20000000', 'G'),
 (118, 16, 1, 1, 1, 999, 1, '0.0000', '$', 0, 'P', '12.20000000', 'G'),
 (117, 16, 1, 1, 2, 999, 1, '0.0000', '$', 0, 'P', '12.20000000', 'G'),
 (116, 16, 1, 1, 3, 999, 1, '0.0000', '$', 0, 'P', '12.20000000', 'G'),
 (115, 17, 1, 2, 4, 999, 1, '0.0000', '$', 0, 'P', '12.20000000', 'G'),
 (114, 17, 1, 2, 5, 999, 1, '0.0000', '$', 0, 'P', '12.20000000', 'G'),
-(113, 17, 1, 2, 6, 999, 1, '0.0000', '$', 0, 'P', '12.20000000', 'G');
+(113, 17, 1, 2, 6, 999, 1, '0.0000', '$', 0, 'P', '12.20000000', 'G'),
+(128, 18, 33, 2, 6, 999, 1, '0.0000', '$', 0, 'P', '12.20000000', 'G'),
+(129, 18, 33, 2, 5, 999, 1, '0.0000', '$', 0, 'P', '12.20000000', 'G'),
+(130, 18, 33, 2, 4, 999, 1, '0.0000', '$', 0, 'P', '12.20000000', 'G');
 
 -- --------------------------------------------------------
 
@@ -1988,7 +2011,9 @@ INSERT INTO `oc_product_to_category` (`product_id`, `category_id`) VALUES
 (24, 4),
 (28, 1),
 (29, 1),
-(30, 3);
+(30, 3),
+(31, 1),
+(33, 1);
 
 -- --------------------------------------------------------
 
@@ -2372,7 +2397,7 @@ CREATE TABLE `oc_user` (
 --
 
 INSERT INTO `oc_user` (`user_id`, `user_group_id`, `username`, `password`, `api_token`, `salt`, `firstname`, `lastname`, `email`, `image`, `code`, `ip`, `status`, `date_added`) VALUES
-(1, 1, 'admin', '$2y$10$2fIZANKxK9OWfPYsAHTC6OCCzCH.nY1FtzH/.azL3yO0QEsvM7wz2', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2dyb3Vwb25fYXBpXC9wdWJsaWNcL2FwaVwvdXNlclwvbG9naW4iLCJpYXQiOjE1NTE3NDg2NDUsImV4cCI6MTU1MTc1MjI0NSwibmJmIjoxNTUxNzQ4NjQ1LCJqdGkiOiJTQzZuQ2pIN3J3WHNyYmZSIiwic3ViIjoxLCJwcnYiOiI4N2UwYWYxZWY5ZmQxNTgxMmZkZWM5NzE1M2ExNGUwYjA0NzU0NmFhIn0.ZX7lsgHqx49AQ_6cEY8Mun7hUYvmUC35-Sm3Gp2PXeA', '', '', '', 'admin@admin.com', '', '', '', 0, '1900-10-10 00:00:00'),
+(1, 1, 'admin', '$2y$10$2fIZANKxK9OWfPYsAHTC6OCCzCH.nY1FtzH/.azL3yO0QEsvM7wz2', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC91c2VyXC9sb2dpbiIsImlhdCI6MTU1MjIwMDY1MSwiZXhwIjoxNTUyMjA0MjUxLCJuYmYiOjE1NTIyMDA2NTEsImp0aSI6InFiRGQ1RGZ0OWN0REVXQ0kiLCJzdWIiOjEsInBydiI6Ijg3ZTBhZjFlZjlmZDE1ODEyZmRlYzk3MTUzYTE0ZTBiMDQ3NTQ2YWEifQ.9PHh3DAiX-bFv8fb6SAfndfINdFv7dTB2dIvEPNzKgc', '', '', '', 'admin@admin.com', '', '', '', 0, '1900-10-10 00:00:00'),
 (6, 1, 'john', '$2y$10$cPGhd.NVLdHdHFuqf6Er7OTzkpeyqnf9WkxoIUJ2RODC65SDWRUum', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2dyb3Vwb25fYXBpXC9wdWJsaWNcL2FwaVwvdXNlclwvbG9naW4iLCJpYXQiOjE1NTE3NDcyNzksImV4cCI6MTU1MTc1MDg3OSwibmJmIjoxNTUxNzQ3Mjc5LCJqdGkiOiJHOTkxRk5NOFRkWWJDVEV3Iiwic3ViIjo2LCJwcnYiOiI4N2UwYWYxZWY5ZmQxNTgxMmZkZWM5NzE1M2ExNGUwYjA0NzU0NmFhIn0.6NbcPGCQfdh-gn-VLFFMHqjUIwuv8B6tPpv1T84vKWc', '', '', '', 'john@test.com', '', '', '', 0, '1900-10-10 00:00:00'),
 (5, 1, 'roben', '$2y$10$H0ER2H8KMzy8N8RN5scxieXXgUUkUSqpJea68DGPU0HtsF.BBueMi', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2dyb3Vwb25fYXBpXC9wdWJsaWNcL2FwaVwvdXNlclwvbG9naW4iLCJpYXQiOjE1NTE3NDc0NTMsImV4cCI6MTU1MTc1MTA1MywibmJmIjoxNTUxNzQ3NDUzLCJqdGkiOiI4MDdWRWRGSXFORmQ5endqIiwic3ViIjo1LCJwcnYiOiI4N2UwYWYxZWY5ZmQxNTgxMmZkZWM5NzE1M2ExNGUwYjA0NzU0NmFhIn0.f1_vJO9sF00TqoG4OP92zvXLMt_wHyAFPwjznCwVAV8', '', '', '', 'roben@test.com', '', '', '', 0, '1900-10-10 00:00:00');
 
@@ -3468,7 +3493,7 @@ ALTER TABLE `oc_cart`
 -- 使用表AUTO_INCREMENT `oc_category`
 --
 ALTER TABLE `oc_category`
-  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- 使用表AUTO_INCREMENT `oc_country`
@@ -3702,7 +3727,7 @@ ALTER TABLE `oc_option_value`
 -- 使用表AUTO_INCREMENT `oc_order`
 --
 ALTER TABLE `oc_order`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- 使用表AUTO_INCREMENT `oc_order_history`
@@ -3720,7 +3745,7 @@ ALTER TABLE `oc_order_option`
 -- 使用表AUTO_INCREMENT `oc_order_product`
 --
 ALTER TABLE `oc_order_product`
-  MODIFY `order_product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `order_product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- 使用表AUTO_INCREMENT `oc_order_recurring`
@@ -3768,13 +3793,13 @@ ALTER TABLE `oc_permission`
 -- 使用表AUTO_INCREMENT `oc_product`
 --
 ALTER TABLE `oc_product`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- 使用表AUTO_INCREMENT `oc_product_discount`
 --
 ALTER TABLE `oc_product_discount`
-  MODIFY `product_discount_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `product_discount_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- 使用表AUTO_INCREMENT `oc_product_image`
@@ -3786,13 +3811,13 @@ ALTER TABLE `oc_product_image`
 -- 使用表AUTO_INCREMENT `oc_product_option`
 --
 ALTER TABLE `oc_product_option`
-  MODIFY `product_option_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `product_option_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- 使用表AUTO_INCREMENT `oc_product_option_value`
 --
 ALTER TABLE `oc_product_option_value`
-  MODIFY `product_option_value_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=119;
+  MODIFY `product_option_value_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=131;
 
 --
 -- 使用表AUTO_INCREMENT `oc_product_reward`
