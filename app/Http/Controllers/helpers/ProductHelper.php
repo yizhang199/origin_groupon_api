@@ -31,7 +31,7 @@ class ProductHelper
             }
             $dto['name'] = $categoryDescription->name;
 
-            $products = $category->products()->where("status", $status)->where("quantity", ">", 0)->orderBy("sort_order", "desc")->get();
+            $products = $category->products()->where("status", $status)->where("quantity", ">=", 0)->orderBy("sort_order", "desc")->get();
 
             foreach ($products as $product) {
                 # deal with discount

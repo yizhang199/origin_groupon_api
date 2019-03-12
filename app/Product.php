@@ -32,7 +32,7 @@ class Product extends Model
         'length_class_id' => 0,
         'subtract' => 0,
         'minimum' => 1,
-        'status' => 1,
+        'status' => 0,
         'viewed' => 1,
         'date_added' => '1900-10-11',
         'date_modified' => '1900-10-11',

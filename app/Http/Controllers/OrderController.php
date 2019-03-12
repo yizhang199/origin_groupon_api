@@ -306,7 +306,7 @@ class OrderController extends Controller
         $orders = Order::where('customer_id', $user->user_id)->get();
 // add details to each order
         foreach ($orders as $order) {
-            $detailedOrder = self::makeOrder($order);
+            $detailedOrder = $this->helper->makeOrder($order);
             array_push($responseOrders, $detailedOrder);
         }
 
