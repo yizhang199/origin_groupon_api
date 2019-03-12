@@ -107,6 +107,10 @@ class CategoryController extends Controller
             $category->image = "/images/categories/$name";
         }
 
+        if ($request->sort_order) {
+            $category->sort_order = $request->sort_order;
+        }
+
         $category->save();
 
         $categoryDescription1 = CategoryDescription::where("category_id", $category_id)->where("language_id", 1)->first();

@@ -28,8 +28,6 @@ class Category extends Model
         'parent_id',
         'top',
         'column',
-        'sort_order',
-
         'date_added',
         'date_modified',
     ];
