@@ -18,7 +18,7 @@ class Category extends Model
         'top' => 1,
         'column' => 123,
         'sort_order' => 123,
-        'status' => 1,
+        'status' => 0,
         'date_added' => '1900-10-11',
         'date_modified' => '1900-10-11',
     ];
@@ -29,7 +29,7 @@ class Category extends Model
         'top',
         'column',
         'sort_order',
-        'status',
+
         'date_added',
         'date_modified',
     ];

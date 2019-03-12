@@ -65,6 +65,7 @@ class CategoryController extends Controller
         $category = Category::create();
         if (isset($request->sort_order)) {
             $category->sort_order = $request->sort_order;
+
             $category->save();
         }
         if ($request->get("file")) {
@@ -120,6 +121,21 @@ class CategoryController extends Controller
         return response()->json($response_array, 200);
     }
 
+    public function patch(Request $request, $category_id)
+    {
+        $language_id = isset($request->language_id) ? $request->language_id : 2;
+// Category::destroy($category_id);
+        $category = Category::find($category_id);
+        $category->status = 0;
+        $category->save();
+// CategoryDescription::where("category_id", $category_id)->delete();
+
+        $categories = self::getCategoryList($language_id);
+
+        return response()->json($categories, 200);
+
+    }
+
     public function getCategoryList($language_id)
     {
         $response_array = array();
@@ -142,6 +158,7 @@ class CategoryController extends Controller
             $item['other_name'] = $description2->name;
             $item["number_of_products"] = $count;
             $item["image"] = $category->image;
+            $item["status"] = $category->status;
 
             array_push($response_array, $item);
         }
@@ -153,9 +170,11 @@ class CategoryController extends Controller
     public function delete(Request $request, $category_id)
     {
         $language_id = isset($request->language_id) ? $request->language_id : 2;
-        Category::destroy($category_id);
-
-        CategoryDescription::where("category_id", $category_id)->delete();
+        // Category::destroy($category_id);
+        $category = Category::find($category_id);
+        $category->status = 1;
+        $category->save();
+        // CategoryDescription::where("category_id", $category_id)->delete();
 
         $categories = self::getCategoryList($language_id);
 

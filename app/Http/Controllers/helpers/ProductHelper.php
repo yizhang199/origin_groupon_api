@@ -3,6 +3,7 @@ namespace App\Http\Controllers\helpers;
 
 use App\Category;
 use App\Product;
+use App\ProductDiscount;
 use App\ProductToCategory;
 
 class ProductHelper
@@ -16,7 +17,7 @@ class ProductHelper
      */
     public function getProductsList($language_id, $status, $search_string, $user_group_id)
     {
-        $categories = Category::all();
+        $categories = Category::where("status", 0)->get();
 
         $responseData = [];
 
@@ -260,6 +261,19 @@ class ProductHelper
         }
 
         return array("price" => $product["price"], "quantity" => 0, "status" => false);
+    }
+
+    public function createDiscount($request, $product_id)
+    {
+        $product = json_decode(json_encode($request->product));
+        ProductDiscount::create([
+            'product_id' => $product_id,
+            'quantity' => $product->stock_status_id,
+            'price' => $product->discountPrice,
+            'date_start' => isset($product->date_start) ? $product->date_start : '1900-2-2',
+            'date_end' => isset($product->date_end) ? $product->date_end : '2200-2-2',
+        ]);
+
     }
 
 }

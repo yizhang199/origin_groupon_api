@@ -121,14 +121,7 @@ class ProductController extends Controller
 
         # groupon product add discounts
         if ($request->isGroupon) {
-            $product = json_decode(json_encode($request->product));
-            ProductDiscount::create([
-                'product_id' => $product->product_id,
-                'quantity' => $product->stock_status_id,
-                'price' => $product->discountPrice,
-                'date_start' => $product->date_start,
-                'date_end' => $product->date_end,
-            ]);
+            $this->helper->createDiscount($request, $product_id);
         }
 
         # prepare response object
@@ -175,6 +168,9 @@ class ProductController extends Controller
         $product->price = $request->product->price;
         $product->quantity = $request->product->quantity;
         $product->sort_order = $request->product->sort_order;
+        if ($request->isGroupon) {
+            $product->stock_status_id = $request->product->order_status_id;
+        }
 
         //How To:: upload image React && Laravel
         if ($request->get("file")) {
@@ -244,7 +240,12 @@ class ProductController extends Controller
             }
         }
 
-        // How To:: use whereIn and whereNotIn
+        // Review:: use whereIn and whereNotIn
+        # groupon product add discounts
+        if ($request->isGroupon) {
+            $this->helper->createDiscount($request, $product_id);
+        }
+
         // 5. delete options - remove product option which product_option_id not contains in $new_product_opiton_ids
         ProductOption::where("product_id", $product_id)->whereNotIn("product_option_id", $new_product_option_ids)->delete();
 
