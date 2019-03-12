@@ -56,11 +56,17 @@ class ReportsHelper
         foreach ($order_products as $orderArray) {
             $total = 0;
             $product_id = $orderArray[0]->product_id;
+
             $product_name = Product::find($product_id)->descriptions()->where("language_id", $language_id)->first()->name;
             foreach ($orderArray as $order) {
                 $total += $order->total;
             }
-            array_push($array, ["product" => $product_id, "product_name" => $product_name, "total" => $total]);
+            array_push($array, [
+                "product" => $product_id,
+                "product_name" => $product_name,
+                "total" => $total,
+
+            ]);
 
         }
 
@@ -201,12 +207,19 @@ class ReportsHelper
             $total = 0;
             $quantity = 0;
             $product_id = $orderArray[0]->product_id;
-            $product_name = Product::find($product_id)->descriptions()->where("language_id", $language_id)->first()->name;
+            $product = Product::find($product_id);
+            $product_name = $product->descriptions()->where("language_id", $language_id)->first()->name;
             foreach ($orderArray as $order) {
                 $quantity += $order->quantity;
                 $total += $order->total;
             }
-            array_push($array, ["product" => $product_id, "product_name" => $product_name, "total" => $total, "quantity" => $quantity]);
+            array_push($array, [
+                "product" => $product_id,
+                "product_name" => $product_name,
+                "total" => $total,
+                "quantity" => $quantity,
+                "price" => $product->price,
+            ]);
 
         }
 
