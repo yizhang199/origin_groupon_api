@@ -53,8 +53,8 @@ class ProductHelper
                 # make product image
                 $image_path = config("app.baseurl") . $product["image"];
 
-                if ($product["image"] === null || !file_exists($_SERVER['DOCUMENT_ROOT'] . $image_path)) {
-                    $product["image"] = url('/') . '/images/products/default_product.jpg';
+                if ($product["image"] === null || $product["image"] === "" || !file_exists($_SERVER['DOCUMENT_ROOT'] . $image_path)) {
+                    $product["image"] = url('/') . '/images/products/default_product.jpeg';
 
                 }
                 $product["image"] = url('/') . $product["image"];
