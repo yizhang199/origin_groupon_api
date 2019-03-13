@@ -73,8 +73,8 @@ Route::post('layout', "LayoutTextController@create");
 // Route::post("payment", "OrderController@paymentNotify");
 Route::post('payment', "PaymentController@store");
 
-Route::get("salesgroup", "SalesGroupController@index");
+Route::get("salesgroups", "SalesGroupController@index");
 Route::get("salesgroup/{salesGroupId}", "SalesGroupController@show");
-Route::post("salesgroup/{salesGroupId}", "SalesGroupController@create");
-Route::put("salesgroup/{salesGroupId}", "SalesGroupController@update");
-Route::delete("salesgroup/{salesGroupId}", "SalesGroupController@delete");
+Route::post("salesgroups", "SalesGroupController@store");
+Route::put("salesgroups/{salesGroupId}", "SalesGroupController@update");
+Route::delete("salesgroups/{salesGroupId}", "SalesGroupController@delete");
