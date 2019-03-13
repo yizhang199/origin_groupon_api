@@ -72,7 +72,18 @@ class LocationController extends Controller
         // create location
         $location = Location::create(['name' => $request->name, 'open' => json_encode($request->open), 'address' => $request->address, 'telephone' => $request->telephone]);
 
-        return response()->json(compact('location'), 201);
+        // prepare data
+        $locations = Location::all();
+        foreach ($locations as $location) {
+            if ($location->open !== null) {
+                $location->open = json_decode($location->open);
+            } else {
+                $location->open = [];
+            }
+        }
+
+        return response()->json(compact('locations'), 200);
+
     }
     /**
      * update location
