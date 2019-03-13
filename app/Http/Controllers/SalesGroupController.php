@@ -41,7 +41,7 @@ class SalesGroupController extends Controller
         $salesGroup = SalesGroup::find($salesGroupId);
 
         $salesGroup->name = $request->name;
-        $salesGroup->start_date = $request->state_date;
+        $salesGroup->start_date = $request->start_date;
         $salesGroup->end_date = $request->end_date;
 
         $salesGroup->save();

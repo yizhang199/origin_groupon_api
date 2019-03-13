@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\LayoutText;
+use App\SalesGroup;
 use Illuminate\Http\Request;
 
 class InitController extends Controller
@@ -26,6 +27,35 @@ class InitController extends Controller
             $labels[$item->name] = $desc->text;
         }
 
-        return response()->json(["custom_setting" => $custom_setting, "layout_text" => $labels], 200);
+        # create app_status
+        // today
+        $dt = new \DateTime("now", new \DateTimeZone('Australia/Sydney'));
+        $today = $dt->format('Y-m-d');
+        // if any sales group only now
+        $sales_group = SalesGroup::where("start_date", "<=", $today)
+            ->where("end_date", ">=", $today)
+            ->first();
+        if ($sales_group !== null) { // yes, return information of opened sales group
+            $isOpen = true;
+            $start_date = $sales_group->start_date;
+            $end_date = $sales_group->end_date;
+        } else {
+            $isOpen = false; // no, try to find closest open date for next sales group
+            $sales_group = SalesGroup::where("start_date", ">=", $today)->first();
+            if ($sales_group !== null) {
+                $start_date = $sales_group->start_date;
+                $end_date = $sales_group->end_date;
+            } else { // not found any sales group in future, return empty string, client side will render some text message to user
+                $start_date = "";
+                $end_date = "";
+            }
+        }
+
+        $app_status = array(
+            "isOpen" => $isOpen,
+            "start_date" => $start_date,
+            "end_date" => $end_date,
+        );
+        return response()->json(compact("custom_setting", "labels", "app_status"), 200);
     }
 }
