@@ -39,6 +39,8 @@ Route::get('locations', 'LocationController@index');
 Route::get('locations/{location_id}', 'LocationController@show');
 Route::post('locations', 'LocationController@create');
 Route::put('locations/{location_id}', 'LocationController@update');
+Route::patch('locations/{location_id}', 'LocationController@patch');
+Route::delete('locations/{location_id}', 'LocationController@delete');
 
 Route::get('reports', 'ReportsController@summary');
 Route::get('report', 'ReportsController@show');

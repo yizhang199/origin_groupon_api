@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\helpers\LocationHelper;
 use App\Location;
 use Illuminate\Http\Request;
 
 class LocationController extends Controller
 {
+    private $helper;
+    public function __construct()
+    {
+        $this->helper = new LocationHelper();
+    }
     /**
      * all locations(shops)
      * @param Integer $language_id
@@ -24,14 +30,7 @@ class LocationController extends Controller
         }
 
         // prepare data
-        $locations = Location::all();
-        foreach ($locations as $location) {
-            if ($location->open !== null) {
-                $location->open = json_decode($location->open);
-            } else {
-                $location->open = [];
-            }
-        }
+        $locations = $this->helper->getLocations();
 
         return response()->json(compact('locations'), 200);
     }
@@ -73,14 +72,7 @@ class LocationController extends Controller
         $location = Location::create(['name' => $request->name, 'open' => json_encode($request->open), 'address' => $request->address, 'telephone' => $request->telephone]);
 
         // prepare data
-        $locations = Location::all();
-        foreach ($locations as $location) {
-            if ($location->open !== null) {
-                $location->open = json_decode($location->open);
-            } else {
-                $location->open = [];
-            }
-        }
+        $locations = $this->helper->getLocations();
 
         return response()->json(compact('locations'), 200);
 
@@ -130,15 +122,33 @@ class LocationController extends Controller
 
         $location->update($input);
 
-        $locations = Location::all();
-        foreach ($locations as $location) {
-            if ($location->open !== null) {
-                $location->open = json_decode($location->open);
-            } else {
-                $location->open = [];
-            }
-        }
+        $locations = $this->helper->getLocations();
 
         return response()->json(compact('locations'), 200);
+    }
+    public function delete(Request $request, $location_id)
+    {
+        $location = Location::find($location_id);
+
+        $location->status = 1;
+
+        $location->save();
+
+        $locations = $this->helper->getLocations();
+
+        return response()->json(compact("locations"), 200);
+    }
+    public function patch(Request $request, $location_id)
+    {
+        $location = Location::find($location_id);
+
+        $location->status = 0;
+
+        $location->save();
+
+        $locations = $this->helper->getLocations();
+
+        return response()->json(compact("locations"), 200);
+
     }
 }
