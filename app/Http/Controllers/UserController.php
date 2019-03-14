@@ -78,7 +78,7 @@ class UserController extends Controller
         $payload = [
             'password' => \Hash::make($request->password),
             'phone' => $request->phone,
-            'username' => 'user' . $request->phone,
+            'username' => $request->username,
             'api_token' => '',
         ];
 
