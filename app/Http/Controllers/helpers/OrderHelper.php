@@ -18,9 +18,11 @@ class OrderHelper
     /**
      * function - make orders group by store
      */
-    public function makeOrdersByStore($search_string)
+    public function makeOrdersByStore($search_string, $start_date, $end_date)
     {
-        $orders = Order::all();
+        $orders = Order::where("date_added", ">=", $start_date)
+            ->where("date_add", "<=", $end_date)
+            ->get();
         foreach ($orders as $order) {
             if ($search_string !== "") {
                 if (
@@ -157,9 +159,11 @@ class OrderHelper
      * @param Request
      * @return void
      */
-    public function makeOrders($search_string)
+    public function makeOrders($search_string, $start_date, $end_date)
     {
-        $orders = Order::paginate(3);
+        $orders = Order::where("date_added", "<=", $end_date)
+            ->where("date_added", ">=", $start_date)
+            ->paginate(3);
         foreach ($orders as $order) {
             if ($search_string !== "") {
                 if (

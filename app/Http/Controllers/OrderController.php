@@ -54,7 +54,13 @@ class OrderController extends Controller
      */
     public function update(Request $request, $order_id)
     {
-        $orders = $this->helper->makeOrders($request);
+        $dt = new \DateTime("now", new \DateTimeZone('Australia/Sydney'));
+        $today = $dt->format('Y-m-d');
+
+        $end_date = isset($request->end_date) ? $request->end_date : $today;
+        $start_date = isset($request->start_date) ? $request->start_date : $today;
+
+        $orders = $this->helper->makeOrders($request, $start_date, $end_date);
         $dbOrder = Order::find($order_id);
         if ($dbOrder === null) {
             return response()->json(['errors' => "can not found order"], 400);
@@ -73,15 +79,21 @@ class OrderController extends Controller
     {
         $method = isset($request->method) ? $request->method : "all";
         $search_string = isset($request->search_string) ? $request->search_string : "";
+        $dt = new \DateTime("now", new \DateTimeZone('Australia/Sydney'));
+        $today = $dt->format('Y-m-d');
+
+        $end_date = isset($request->end_date) ? $request->end_date : $today;
+        $start_date = isset($request->start_date) ? $request->start_date : $today;
+
         switch ($method) {
             case 'all':
-                $orders = $this->helper->makeOrders($search_string);
+                $orders = $this->helper->makeOrders($search_string, $start_date, $end_date);
                 break;
             case 'byStore':
-                $orders = $this->helper->makeOrdersByStore($search_string);
+                $orders = $this->helper->makeOrdersByStore($search_string, $start_date, $end_date);
                 break;
             default:
-                $orders = $this->helper->makeOrders($search_string);
+                $orders = $this->helper->makeOrders($search_string, $start_date, $end_date);
                 break;
         }
 
@@ -340,7 +352,13 @@ class OrderController extends Controller
         $newOrder->save();
 
         $search_string = isset($request->search_string) ? $request->search_string : "";
-        $orders = $this->helper->makeOrders($search_string);
+
+        $dt = new \DateTime("now", new \DateTimeZone('Australia/Sydney'));
+        $today = $dt->format('Y-m-d');
+
+        $end_date = isset($request->end_date) ? $request->end_date : $today;
+        $start_date = isset($request->start_date) ? $request->start_date : $today;
+        $orders = $this->helper->makeOrders($search_string, $start_date, $end_date);
         $dbOrder = Order::find($order_id);
         if ($dbOrder === null) {
             return response()->json(['errors' => "can not found order"], 400);
