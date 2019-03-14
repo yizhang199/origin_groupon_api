@@ -17,7 +17,7 @@ class ProductHelper
      */
     public function getProductsList($language_id, $status, $search_string, $user_group_id)
     {
-        $categories = Category::where("status", 0)->get();
+        $categories = Category::where("status", 0)->orderBy("sort_order", 'desc')->get();
 
         $responseData = [];
 
