@@ -92,6 +92,9 @@ class OrderController extends Controller
             case 'byStore':
                 $orders = $this->helper->makeOrdersByStore($search_string, $start_date, $end_date);
                 break;
+            case 'adv':
+                $orders = $this->helper->makeOrdersByCondition($search_string, $start_date, $end_date);
+                break;
             default:
                 $orders = $this->helper->makeOrders($search_string, $start_date, $end_date);
                 break;

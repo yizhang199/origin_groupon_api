@@ -143,4 +143,8 @@ class Order extends Model
     {
         return $this->hasMany('App\OrderStatus', 'order_status_id', 'order_status_id');
     }
+    public function products()
+    {
+        return $this->hasMay('App\OrderProduct', 'order_id', 'order_id');
+    }
 }

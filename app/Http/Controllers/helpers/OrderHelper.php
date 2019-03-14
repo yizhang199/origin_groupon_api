@@ -189,6 +189,34 @@ class OrderHelper
         return $orders;
     }
 
+    public function makeOrdersByCondition($search_string, $start_date, $end_date)
+    {
+        $orders = Order::where("date_added", "<=", $end_date)
+            ->where("date_added", ">=", $start_date)
+            ->paginate(3);
+        foreach ($orders as $order) {
+            if ($search_string !== "") {
+                $order_products = $order::products()->where('name', 'like', "%$search_string%")->get();
+                if (count($order_products) > 0) {
+                    $orders = $orders->filter(function ($item) use ($order) {
+                        return $item->order_id !== $order->order_id;
+                    })->values();
+                }
+            }
+        }
+        foreach ($orders as $order) {
+            $order["status_name"] = $order->status()->first()->name;
+            $user = User::find($order->customer_id);
+            $order["user"] = $user;
+            $store = Location::find($order->store_id);
+            $order["order_items"] = self::fetchOrderProducts($order->order_id);
+
+            $order["store_name"] = $store->name;
+        }
+        return $orders;
+
+    }
+
     /**
      * helper function to fetch order product options
      * @param Integer OrderProductId
