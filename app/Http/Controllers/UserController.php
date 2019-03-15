@@ -112,12 +112,14 @@ class UserController extends Controller
         return response()->json($response, 200);
 
     }
+
     public function fetchSingle(Request $request, $user_id)
     {
         $user = User::find($user_id);
 
         return response()->json(compact("user"), 200);
     }
+
     public function update(Request $request, $user_id)
     {
         $user = User::find($user_id);
