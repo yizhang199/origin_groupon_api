@@ -151,11 +151,13 @@ class OrderController extends Controller
             'date_modified' => $today,
             'order_status_id' => $request->order_status_id,
         ];
+
         $order = Order::create($input);
         if (isset($request->customerComments)) {
             $order->comment = $request->customerComments;
             $order->save();
         }
+
         $order_products = $this->helper->createOrderProducts($request, $order->order_id);
 
         // make reponse body

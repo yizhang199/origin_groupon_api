@@ -9,6 +9,7 @@ use App\OrderProduct;
 use App\OrderStatus;
 use App\Product;
 use App\ProductDescription;
+use App\ProductDiscount;
 use App\ProductOption;
 use App\ProductOptionValue;
 use App\User;
@@ -249,7 +250,15 @@ class OrderHelper
             // decrease product quantity
             $product = Product::find($orderItem->product_id);
             $product->decrement("quantity", $orderItem->quantity);
+            $productDiscount = ProductDiscount::where("product_id", $orderItem->product_id)->first();
+            if ($productDiscount !== null) {
+
+                $productDiscount->decrement("quantity", $orderItem->quantity);
+            }
             if (!isset($product) || $product->quantity < 0) {
+                return response()->json(["errors" => ["code" => 1, "message" => "quantity is over stock"]], 400);
+            }
+            if ($productDiscount !== null && $productDiscount->quantity < 0) {
                 return response()->json(["errors" => ["code" => 1, "message" => "quantity is over stock"]], 400);
             }
 
