@@ -50,6 +50,9 @@ Route::get('report', 'ReportsController@show');
 Route::post('user/login', 'UserController@login');
 Route::post('user/register', 'UserController@register');
 Route::get('users', 'UserController@index');
+Route::get('user/{user_id}', 'UserController@fetchSingle');
+Route::put('user/{user_id}', 'UserController@update');
+Route::post('users', 'UserController@store');
 
 Route::group(['middleware' => ['jwt.auth']], function () {
 // all routes to protected resources are registered here

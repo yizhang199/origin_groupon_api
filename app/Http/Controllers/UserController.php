@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\helpers\UserHelper;
 use App\User;
 use Illuminate\Http\Request;
 use JWTAuth;
@@ -8,6 +9,11 @@ use JWTAuthException;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->helper = new UserHelper();
+    }
+
     private function getToken($email, $password)
     {
         $token = null;
@@ -36,10 +42,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $user_group = isset($request->user_group) ? $request->user_group : "customer";
-        $user_group_ids = $user_group === "customer" ? [1, 2] : [3];
-        // ::Review::
-        $users = User::with("permissions")->whereIn("user_group_id", $user_group_ids)->get();
+        $users = $this->helper->fetchUsers($request);
 
         return response()->json(compact("users"), 200);
     }
@@ -108,5 +111,30 @@ class UserController extends Controller
 
         return response()->json($response, 200);
 
+    }
+    public function fetchSingle(Request $request, $user_id)
+    {
+        $user = User::find($user_id);
+
+        return response()->json(compact("user"), 200);
+    }
+    public function update(Request $request, $user_id)
+    {
+        $user = User::find($user_id);
+        if (isset($request->username)) {
+            $check_user_result = User::where('username', $request->username)->first();
+            if ($check_user_result !== null && $check_user_result->user_id != $user_id) {
+                $errors = array("message" => "username duplicated");
+                return response()->json(compact("errors"), 400);
+            }
+        }
+        $user->username = isset($request->username) ? $request->username : $user->username;
+        $user->email = isset($request->email) ? $request->email : $user->email;
+        $user->phone = isset($request->phone) ? $request->phone : $user->phone;
+        $user->status = isset($request->status) ? $request->status : $user->status;
+        $user->save();
+
+        $users = $this->helper->fetchUsers($request);
+        return response()->json(compact("users"), 200);
     }
 }
