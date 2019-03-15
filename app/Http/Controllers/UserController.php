@@ -9,20 +9,24 @@ use JWTAuthException;
 
 class UserController extends Controller
 {
+<<<<<<< HEAD
     public function __construct()
     {
         $this->helper = new UserHelper();
     }
 
     private function getToken($email, $password)
+=======
+    private function getToken($phone, $password)
+>>>>>>> 45e26fcde88671795d56c0f68a833f002773ea5b
     {
         $token = null;
         //$credentials = $request->only('email', 'password');
         try {
-            if (!$token = JWTAuth::attempt(['email' => $email, 'password' => $password])) {
+            if (!$token = JWTAuth::attempt(['phone' => $phone, 'password' => $password])) {
                 return response()->json([
                     'response' => 'error',
-                    'message' => 'Password or email is invalid',
+                    'message' => 'Password or phone is invalid',
                     'token' => $token,
                 ]);
             }
@@ -55,14 +59,21 @@ class UserController extends Controller
      */
     public function login(Request $request)
     {
-        $user = \App\User::where('email', $request->email)->get()->first();
+        $user = \App\User::where('phone', $request->phone)->get()->first();
         if ($user && \Hash::check($request->password, $user->password)) // The passwords match...
         {
-            $token = self::getToken($request->email, $request->password);
+            $token = self::getToken($request->phone, $request->password);
             $user->api_token = $token;
             $user->save();
             $permissions = $user->permissions()->get();
-            $response = ['success' => true, 'data' => ['id' => $user->user_id, 'api_token' => $user->api_token, 'name' => $user->username, 'email' => $user->email, 'permissions' => $permissions]];
+            $response = ['success' => true, 'data' => [
+                'id' => $user->user_id,
+                'api_token' => $user->api_token,
+                'name' => $user->username,
+                'phone' => $user->phone,
+                'email' => $user->email,
+                'permissions' => $permissions,
+            ]];
         } else {
             $response = ['success' => false, 'data' => 'Record doesnt exists'];
         }
@@ -73,7 +84,7 @@ class UserController extends Controller
     {
         $payload = [
             'password' => \Hash::make($request->password),
-            'email' => $request->email,
+            'phone' => $request->phone,
             'username' => $request->username,
             'api_token' => '',
         ];
@@ -81,13 +92,13 @@ class UserController extends Controller
         $user = new \App\User($payload);
         if ($user->save()) {
 
-            $token = self::getToken($request->email, $request->password); // generate user token
+            $token = self::getToken($request->phone, $request->password); // generate user token
 
             if (!is_string($token)) {
                 return response()->json(['success' => false, 'data' => 'Token generation failed'], 201);
             }
 
-            $user = \App\User::where('email', $request->email)->get()->first();
+            $user = \App\User::where('phone', $request->phone)->get()->first();
 
             $user->api_token = $token; // update user token
 

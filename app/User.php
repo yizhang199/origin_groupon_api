@@ -16,12 +16,13 @@ class User extends Authenticatable implements JWTSubject
     public $timestamps = false;
 
     protected $fillable = [
-        'username', 'email', 'password', 'api_token',
+        'username', 'phone', 'password', 'api_token',
     ];
 
     protected $attributes = [
         'user_group_id' => 1,
         'salt' => '',
+        'email' => '',
         'firstname' => '',
         'lastname' => '',
         'image' => '',
