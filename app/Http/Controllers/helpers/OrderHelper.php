@@ -21,7 +21,7 @@ class OrderHelper
     public function makeOrdersByStore($search_string, $start_date, $end_date)
     {
         $orders = Order::where("date_added", ">=", $start_date)
-            ->where("date_add", "<=", $end_date)
+            ->where("date_added", "<=", $end_date)
             ->get();
         foreach ($orders as $order) {
             if ($search_string !== "") {
