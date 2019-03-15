@@ -1,7 +1,6 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\helpers\UserHelper;
 use App\User;
 use Illuminate\Http\Request;
 use JWTAuth;
@@ -9,16 +8,7 @@ use JWTAuthException;
 
 class UserController extends Controller
 {
-<<<<<<< HEAD
-    public function __construct()
-    {
-        $this->helper = new UserHelper();
-    }
-
-    private function getToken($email, $password)
-=======
     private function getToken($phone, $password)
->>>>>>> 45e26fcde88671795d56c0f68a833f002773ea5b
     {
         $token = null;
         //$credentials = $request->only('email', 'password');
