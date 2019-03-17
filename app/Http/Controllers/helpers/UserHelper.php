@@ -18,14 +18,21 @@ class UserHelper
         }
 
         foreach ($users as $user) {
-
-            $user['accessOrders'] = UserPermission::where("user_id", $user->user_id)->where("permission_id", 2)->first() !== null;
-            $user['accessProducts'] = UserPermission::where("user_id", $user->user_id)->where("permission_id", 3)->first() !== null;
-            $user['accessSalesGroups'] = UserPermission::where("user_id", $user->user_id)->where("permission_id", 4)->first() !== null;
-            $user['accessReports'] = UserPermission::where("user_id", $user->user_id)->where("permission_id", 5)->first() !== null;
-            $user['accessAccounts'] = UserPermission::where("user_id", $user->user_id)->where("permission_id", 6)->first() !== null;
+            $user = self::addAccessLevel($user);
 
         }
         return $users;
+    }
+
+    public function addAccessLevel($user)
+    {
+        $user['accessOrders'] = UserPermission::where("user_id", $user->user_id)->where("permission_id", 2)->first() !== null;
+        $user['accessProducts'] = UserPermission::where("user_id", $user->user_id)->where("permission_id", 3)->first() !== null;
+        $user['accessSalesGroups'] = UserPermission::where("user_id", $user->user_id)->where("permission_id", 4)->first() !== null;
+        $user['accessReports'] = UserPermission::where("user_id", $user->user_id)->where("permission_id", 5)->first() !== null;
+        $user['accessAccounts'] = UserPermission::where("user_id", $user->user_id)->where("permission_id", 6)->first() !== null;
+
+        return $user;
+
     }
 }

@@ -60,15 +60,10 @@ class UserController extends Controller
             $token = self::getToken($request->phone, $request->password);
             $user->api_token = $token;
             $user->save();
-            $permissions = $user->permissions()->get();
-            $response = ['success' => true, 'data' => [
-                'id' => $user->user_id,
-                'api_token' => $user->api_token,
-                'name' => $user->username,
-                'phone' => $user->phone,
-                'email' => $user->email,
-                'permissions' => $permissions,
-            ]];
+            $user = $this->helper->addAccessLevel($user);
+            $user['permissions'] = $user->permissions()->get();
+
+            $response = ['success' => true, 'data' => $user];
         } else {
             $response = ['success' => false, 'data' => 'Record doesnt exists'];
         }
