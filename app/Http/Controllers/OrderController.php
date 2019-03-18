@@ -23,12 +23,6 @@ class OrderController extends Controller
     {
         $this->helper = new OrderHelper();
     }
-
-    public function receiveNotify(Request $request)
-    {
-
-    }
-
     /**
      * show single order details
      *
