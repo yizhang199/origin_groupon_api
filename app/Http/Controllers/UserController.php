@@ -54,15 +54,17 @@ class UserController extends Controller
      */
     public function login(Request $request)
     {
-        $user = \App\User::where('phone', $request->phone)->get()->first();
+        $user = \App\User::where('phone', $request->phone)->where('status', 0)->first();
+        if ($user === null) {
+            $user = \App\User::where('email', $request->phone)->where('status', 0)->first();
+        }
         if ($user && \Hash::check($request->password, $user->password)) // The passwords match...
         {
-            $token = self::getToken($request->phone, $request->password);
+            $token = self::getToken($user->phone, $request->password);
             $user->api_token = $token;
             $user->save();
             $user = $this->helper->addAccessLevel($user);
             $user['permissions'] = $user->permissions()->get();
-
             $response = ['success' => true, 'data' => $user];
         } else {
             $response = ['success' => false, 'data' => 'Record doesnt exists'];
@@ -92,6 +94,8 @@ class UserController extends Controller
 
             $user->api_token = $token; // update user token
 
+            $user->email = isset($request->email) ? $request->email : '';
+
             $user->save();
 
             $response = ['success' => true, 'data' => ['username' => $user->username, 'id' => $user->user_id, 'email' => $request->email, 'api_token' => $token]];
@@ -108,7 +112,13 @@ class UserController extends Controller
         $user = $request->user();
 
         $permissions = $user->permissions()->get();
-        $response = ['success' => true, 'data' => ['id' => $user->user_id, 'api_token' => $user->api_token, 'username' => $user->username, 'email' => $user->email, 'permissions' => $permissions]];
+        $response = ['success' => true, 'data' => [
+            'id' => $user->user_id,
+            'api_token' => $user->api_token,
+            'username' => $user->username,
+            'email' => $user->email,
+            'permissions' => $permissions,
+        ]];
 
         return response()->json($response, 200);
 
@@ -135,6 +145,9 @@ class UserController extends Controller
         $user->email = isset($request->email) ? $request->email : $user->email;
         $user->phone = isset($request->phone) ? $request->phone : $user->phone;
         $user->status = isset($request->status) ? $request->status : $user->status;
+        if (isset($request->password)) {
+            $user->password = \Hash::make($request->password);
+        }
         $user->save();
 
         $users = $this->helper->fetchUsers($request);
