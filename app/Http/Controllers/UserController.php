@@ -112,13 +112,15 @@ class UserController extends Controller
         $user = $request->user();
 
         $permissions = $user->permissions()->get();
-        $response = ['success' => true, 'data' => [
-            'id' => $user->user_id,
-            'api_token' => $user->api_token,
-            'username' => $user->username,
-            'email' => $user->email,
-            'permissions' => $permissions,
-        ]];
+        $response = [
+            'success' => true,
+            'data' => [
+                'id' => $user->user_id,
+                'api_token' => $user->api_token,
+                'username' => $user->username,
+                'email' => $user->email,
+                'permissions' => $permissions,
+            ]];
 
         return response()->json($response, 200);
 
@@ -126,7 +128,8 @@ class UserController extends Controller
 
     public function fetchSingle(Request $request, $user_id)
     {
-        $user = User::find($user_id);
+
+        $user = $this->helper->fetchUser($request, $user_id);
 
         return response()->json(compact("user"), 200);
     }
@@ -141,16 +144,90 @@ class UserController extends Controller
                 return response()->json(compact("errors"), 400);
             }
         }
+        if ($request->phone) {
+            $check_user_result = User::where('phone', $request->phone)->first();
+            if ($check_user_result !== null && $check_user_result->user_id != $user_id) {
+                $errors = array("message" => "phone duplicated");
+                return response()->json(compact("errors"), 400);
+            }
+
+        }
+        if ($request->email) {
+            $check_user_result = User::where('email', $request->email)->first();
+            if ($check_user_result !== null && $check_user_result->user_id != $user_id) {
+                $errors = array("message" => "email duplicated");
+                return response()->json(compact("errors"), 400);
+            }
+        }
+
         $user->username = isset($request->username) ? $request->username : $user->username;
         $user->email = isset($request->email) ? $request->email : $user->email;
         $user->phone = isset($request->phone) ? $request->phone : $user->phone;
         $user->status = isset($request->status) ? $request->status : $user->status;
+
         if (isset($request->password)) {
             $user->password = \Hash::make($request->password);
         }
+
+        if (isset($request->user_group) && $request->user_group === 'staff') {
+            $this->helper->updateAccessLevel($request, $user_id);
+        }
+
         $user->save();
 
         $users = $this->helper->fetchUsers($request);
+        return response()->json(compact("users"), 200);
+    }
+
+    public function store($request)
+    {
+        // read input from $request
+        $user_group = isset($request->user_group) ? $request->user_group : 'customer';
+
+        // check duplicate phone
+        $found_user = User::where('phone', $request->phone)->first();
+        if ($found_user) {
+            $message = '该电话已被占用';
+            return response()->json(compact("message"), 400);
+        }
+
+        // check duplicate email
+        $found_user = User::where('email', $request->email)->first();
+        if ($found_user) {
+            $message = '该邮箱已被占用';
+            return response()->json(compact("message"), 400);
+        }
+
+        $payload = [
+            'password' => \Hash::make($request->password),
+            'phone' => $request->phone,
+            'username' => $request->username,
+            'api_token' => '',
+        ];
+
+        $user = new \App\User($payload);
+        if ($user->save()) {
+
+            $token = self::getToken($request->phone, $request->password); // generate user token
+
+            if (!is_string($token)) {
+                return response()->json(['success' => false, 'data' => 'Token generation failed'], 201);
+            }
+
+            $user = \App\User::where('phone', $request->phone)->get()->first();
+
+            $user->api_token = $token; // update user token
+
+            $user->email = isset($request->email) ? $request->email : '';
+
+            $user->save();
+        } else {
+            $message = "服务器维护中，暂时不能注册用户，稍后再试，或联系服务器供应商";
+            return response()->json(compact("message"), 400);
+        }
+
+        $users = $this->helper->fetchUsers($request);
+
         return response()->json(compact("users"), 200);
     }
 }
