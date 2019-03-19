@@ -54,12 +54,12 @@ class UserHelper
         if (isset($request->accessOrders) && $request->accessOrders) {
             $result = UserPermission::where("user_id", $user_id)->where("permission_id", 2)->first();
             if (!$result) {
-                UserPermission::create(['user_id' => $user_id, 'permission_id', 2]);
+                UserPermission::create(['user_id' => $user_id, 'permission_id' => 2]);
             }
         } else {
             $result = UserPermission::where("user_id", $user_id)->where("permission_id", 2)->first();
             if ($result) {
-                UserPermission::delete();
+                $result->delete();
             }
         }
 
@@ -67,12 +67,12 @@ class UserHelper
         if (isset($request->accessProducts) && $request->accessProducts) {
             $result = UserPermission::where("user_id", $user_id)->where("permission_id", 3)->first();
             if (!$result) {
-                UserPermission::create(['user_id' => $user_id, 'permission_id', 3]);
+                UserPermission::create(['user_id' => $user_id, 'permission_id' => 3]);
             }
         } else {
             $result = UserPermission::where("user_id", $user_id)->where("permission_id", 3)->first();
             if ($result) {
-                UserPermission::delete();
+                $result->delete();
             }
         }
 
@@ -80,12 +80,12 @@ class UserHelper
         if (isset($request->accessSalesGroups) && $request->accessSalesGroups) {
             $result = UserPermission::where("user_id", $user_id)->where("permission_id", 4)->first();
             if (!$result) {
-                UserPermission::create(['user_id' => $user_id, 'permission_id', 4]);
+                UserPermission::create(['user_id' => $user_id, 'permission_id' => 4]);
             }
         } else {
             $result = UserPermission::where("user_id", $user_id)->where("permission_id", 4)->first();
             if ($result) {
-                UserPermission::delete();
+                $result->delete();
             }
         }
 
@@ -93,12 +93,12 @@ class UserHelper
         if (isset($request->accessReports) && $request->accessReports) {
             $result = UserPermission::where("user_id", $user_id)->where("permission_id", 5)->first();
             if (!$result) {
-                UserPermission::create(['user_id' => $user_id, 'permission_id', 5]);
+                UserPermission::create(['user_id' => $user_id, 'permission_id' => 5]);
             }
         } else {
             $result = UserPermission::where("user_id", $user_id)->where("permission_id", 5)->first();
             if ($result) {
-                UserPermission::delete();
+                $result->delete();
             }
         }
 
@@ -106,7 +106,7 @@ class UserHelper
         if (isset($request->accessAccounts) && $request->accessAccounts) {
             $result = UserPermission::where("user_id", $user_id)->where("permission_id", 6)->first();
             if (!$result) {
-                UserPermission::create(['user_id' => $user_id, 'permission_id', 6]);
+                UserPermission::create(['user_id' => $user_id, 'permission_id' => 6]);
             }
         } else {
             $result = UserPermission::where("user_id", $user_id)->where("permission_id", 6)->first();

@@ -179,7 +179,7 @@ class UserController extends Controller
         return response()->json(compact("users"), 200);
     }
 
-    public function store($request)
+    public function store(Request $request)
     {
         // read input from $request
         $user_group = isset($request->user_group) ? $request->user_group : 'customer';
@@ -219,6 +219,7 @@ class UserController extends Controller
             $user->api_token = $token; // update user token
 
             $user->email = isset($request->email) ? $request->email : '';
+            $user->user_group_id = $user_group == 'staff' ? 3 : 2;
 
             $user->save();
         } else {
