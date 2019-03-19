@@ -165,7 +165,7 @@ class UserController extends Controller
         $user->phone = isset($request->phone) ? $request->phone : $user->phone;
         $user->status = isset($request->status) ? $request->status : $user->status;
 
-        if (isset($request->password)) {
+        if (isset($request->password) && $request->password !== "") {
             $user->password = \Hash::make($request->password);
         }
 
