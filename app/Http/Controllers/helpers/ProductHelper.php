@@ -55,9 +55,10 @@ class ProductHelper
 
                 if ($product["image"] === null || $product["image"] === "" || !file_exists($_SERVER['DOCUMENT_ROOT'] . $image_path)) {
                     $product["image"] = url('/') . '/images/products/default_product.jpeg';
+                } else {
 
+                    $product["image"] = url('/') . $product["image"];
                 }
-                $product["image"] = url('/') . $product["image"];
 
                 if ($search_string !== "" && !(strpos($product['name'], $search_string) !== false)) {
                     $products = $products->filter(function ($item) use ($product) {
