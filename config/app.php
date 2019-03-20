@@ -3,7 +3,10 @@
 return [
     # custom setting
     'baseurl' => env('BASEURL', '/roben_api/groupon/public'),
-
+    'homepage' => env('HOME_PAGE', 'https://www.aupos.com'),
+    'returnUrl' => env('RETURN_URL', 'https://www.aupos.com'),
+    'paymentCancelUrl' => env('PAYMENT_CANCEL_URL', 'https://www.aupos.com'),
+    'paymentNotifycationUrl' => env('PAYMENT_NOTIFYCATION_URL', 'https://www.aupos.com'),
     /*
     |--------------------------------------------------------------------------
     | Application Name
