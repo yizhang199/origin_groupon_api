@@ -7,6 +7,7 @@ return [
     'returnUrl' => env('RETURN_URL', 'https://www.aupos.com'),
     'paymentCancelUrl' => env('PAYMENT_CANCEL_URL', 'https://www.aupos.com'),
     'paymentNotifycationUrl' => env('PAYMENT_NOTIFYCATION_URL', 'https://www.aupos.com'),
+    'default_language_id' => env('DEFAULT_LANGUAGE_ID', 1),
     /*
     |--------------------------------------------------------------------------
     | Application Name

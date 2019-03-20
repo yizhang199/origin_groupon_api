@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\helpers\OrderHelper;
+use App\Http\Controllers\helpers\ProductHelper;
 use App\Option;
 use App\Order;
 use App\OrderOption;
@@ -22,6 +23,7 @@ class OrderController extends Controller
     public function __construct()
     {
         $this->helper = new OrderHelper();
+        $this->productHelper = new ProductHelper();
     }
     /**
      * show single order details
@@ -134,40 +136,47 @@ class OrderController extends Controller
 
         $user = $request->user();
 
-        $input = [
-            'invoice_no' => $request->invoice_no,
-            'store_id' => isset($request->store_id) ? $request->store_id : "",
-            'customer_id' => $user->user_id,
-            'fax' => isset($request->fax) ? $request->fax : "",
-            'payment_method' => isset($request->payment_method) ? $request->payment_method : "",
-            'total' => isset($request->total) ? $request->total : "",
-            'date_added' => $today,
-            'date_modified' => $today,
-            'order_status_id' => $request->order_status_id,
-        ];
-
-        $order = Order::create($input);
-        if (isset($request->customerComments)) {
-            $order->comment = $request->customerComments;
+        if (isset($request->order_id)) {
+            $order = Order::find($request->order_id);
+            $order->invoice_no = $request->invoice_no;
+            $order->store_id = isset($request->store_id) ? $request->store_id : $order->store_id;
+            $order->fax = isset($request->fax) ? $request->fax : $order->fax;
+            $order->payment_method = isset($request->payment_method) ? $request->payment_method : $order->payment_method;
+            $order->total = isset($request->total) ? $request->total : $order->total;
+            $order->date_modified = $today;
+            $order->order_status_id = $request->order_status_id;
             $order->save();
+        } else {
+            $input = [
+                'invoice_no' => $request->invoice_no,
+                'store_id' => isset($request->store_id) ? $request->store_id : "",
+                'customer_id' => $user->user_id,
+                'fax' => isset($request->fax) ? $request->fax : "",
+                'payment_method' => isset($request->payment_method) ? $request->payment_method : "",
+                'total' => isset($request->total) ? $request->total : "",
+                'date_added' => $today,
+                'date_modified' => $today,
+                'order_status_id' => $request->order_status_id,
+            ];
+
+            $order = Order::create($input);
+            if (isset($request->customerComments)) {
+                $order->comment = $request->customerComments;
+                $order->save();
+            }
         }
 
         $order_products = $this->helper->createOrderProducts($request, $order->order_id);
 
         // make reponse body
 
-        // response order with details container
-        $responseOrders = array();
-        // Todo:: paginate
-        $orders = Order::where('customer_id', $user->user_id)->get();
-        // add details to each order
-        foreach ($orders as $order) {
-            $detailedOrder = $this->helper->makeOrder($order);
-            array_push($responseOrders, $detailedOrder);
-        }
+        //
 
-        //3. return response
-        return response()->json($responseOrders, 201);
+        // Todo:: paginate
+        $language_id = isset($request->language_id) ? $request->language_id : config('app.default_language_id');
+        $products = $this->productHelper->getProductsList($language_id, 0, "", 2);
+
+        return response()->json(compact("products"));
     }
 
     /**
@@ -180,7 +189,7 @@ class OrderController extends Controller
     {
         $language_id = $request->input("language_id");
         $orderItems = $request->items;
-
+        $order_id = $request->order_id;
         // response result container
         $shoppingCartList = array();
 
@@ -299,7 +308,7 @@ class OrderController extends Controller
             array_push($shoppingCartList, $newOrderItem);
         }
 
-        return response()->json(compact("shoppingCartList"), 200);
+        return response()->json(compact("shoppingCartList", "order_id"), 200);
     }
 
     public function remove(Request $request, $order_id)
