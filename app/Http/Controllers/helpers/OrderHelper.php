@@ -209,7 +209,7 @@ class OrderHelper
             ->paginate(3);
         foreach ($orders as $order) {
             if ($search_string !== "") {
-                $order_products = $order::products()->where('name', 'like', "%$search_string%")->get();
+                $order_products = $order->products()->where('name', 'like', "%$search_string%")->get();
                 if (count($order_products) > 0) {
                     $orders = $orders->filter(function ($item) use ($order) {
                         return $item->order_id !== $order->order_id;
