@@ -127,26 +127,17 @@ class PaymentController extends Controller
     {
         // make reponse body
         $dt = new \DateTime("now", new \DateTimeZone('Australia/Sydney'));
-        $date_received = $dt->format('y-m-d');
-        $message = json_encode($request);
-
+        $date_received = $dt->format('y-m-d h:m:s');
+        $decode = $request->all();
+        $message = $decode['Token'];
         PaymentNotify::create(compact("date_received", "message"));
 
-        // Todo:: paginate
-        // $orders = Order::where('customer_id', $user->user_id)->get();
-        // // add details to each order
-        // foreach ($orders as $order) {
-        //     $detailedOrder = $this->OrderHelper->makeOrder($order);
-        //     array_push($responseOrders, $detailedOrder);
-        // }
-
-        // return response()->json(compact("orders"), 200);
     }
 
-    public function query(Request $request, $payment_id)
+    public function query(Request $request)
     {
         $channel = $request->channel;
-
+        $payment_id = $request->payment_id;
         if ($channel === 'poli') {
             $poli = new Poli();
             $response = $poli->query($payment_id);

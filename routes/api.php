@@ -85,6 +85,6 @@ Route::delete("salesgroups/{salesGroupId}", "SalesGroupController@delete");
 #payment route
 Route::get("payments", "PaymentController@index");
 Route::post('payment', 'PaymentController@store');
-Route::get("payments/{payment_id}", "PaymentController@query");
+Route::get("payment", "PaymentController@query");
 Route::post('payments', 'PaymentController@notify');
 Route::delete('payments', 'PaymentController@cancel');
