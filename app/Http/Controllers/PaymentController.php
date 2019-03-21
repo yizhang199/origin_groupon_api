@@ -8,6 +8,8 @@ use App\Classes\Redpayments;
 use App\Http\Controllers\helpers\OrderHelper;
 use App\Order;
 use App\PaymentNotify;
+use App\Product;
+use App\ProductDiscount;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -32,6 +34,24 @@ class PaymentController extends Controller
         $token = $request->bearerToken();
         $user = User::where("api_token", $token)->first();
 
+        if (isset($request->order_id)) {
+            $order = Order::find($request->order_id);
+            if ($order !== null) {
+                $order->delete();
+
+                $order_products = $order->products()->get();
+                foreach ($order_products as $order_product) {
+
+                    $target_product = Product::find($order_product->product_id)->increment('quantity', $order_product->quantity);
+                    $target_productDiscount = ProductDiscount::where("product_id", $order_product->product_id)->first();
+                    if ($target_productDiscount !== null) {
+                        $target_productDiscount->increment("quantity", $order_product->quantity);
+                    }
+                    $order_product->delete();
+                }
+            }
+        }
+
         $input = [
             'invoice_no' => $request->invoice_no,
             'store_id' => isset($request->store_id) ? $request->store_id : "",
@@ -53,7 +73,7 @@ class PaymentController extends Controller
 
         //2. create payment
         $approvel_url = "";
-        $order_id = "";
+        $payment_id = "";
         $order_status = "";
 
         $request->channel = "POLI";
@@ -73,7 +93,7 @@ class PaymentController extends Controller
                 }
             }
             $order_status = $response->state;
-            $order_id = $response->id;
+            $payment_id = $response->id;
         }
 
         if ($request->channel === "POLI") {
@@ -82,7 +102,7 @@ class PaymentController extends Controller
 
             $order_status = $response->Success ? "success" : "fail";
             $approvel_url = $response->NavigateURL;
-            $order_id = $response->TransactionRefNo;
+            $payment_id = $response->TransactionRefNo;
         }
 
         if ($request->channel === "WECHAT" || $request->channel === "ALIPAY") {
@@ -92,10 +112,13 @@ class PaymentController extends Controller
             return response()->json($response, 200);
         }
 
+        $order->payment_code = $payment_id;
+        $order->save();
+
         return response()->json([
             "status" => $order_status,
             "approvel_url" => $approvel_url,
-            "order_id" => $order_id,
+            "payment_id" => $payment_id,
         ], 200);
     }
 
@@ -118,5 +141,34 @@ class PaymentController extends Controller
         // }
 
         // return response()->json(compact("orders"), 200);
+    }
+
+    public function query(Request $request, $payment_id)
+    {
+        $channel = $request->channel;
+
+        if ($channel === 'poli') {
+            $poli = new Poli();
+            $response = $poli->query($payment_id);
+            $response = json_decode(json_encode($response));
+            $payment_information = array(
+                'error_code' => $response->ErrorCode,
+                'date_time' => $response->MerchantEstablishedDateTime,
+                'status' => $response->TransactionStatus,
+                'bill_amount' => $response->PaymentAmount,
+                'paid_amount' => $response->AmountPaid,
+                'transaction_id' => $response->TransactionID,
+            );
+
+            return response()->json(compact("payment_information"), 200);
+        }
+
+        if ($channel === 'paypal') {
+
+        }
+
+        if ($channel === 'wechat' || $channel === 'alipay') {
+
+        }
     }
 }
