@@ -40,7 +40,7 @@ class LocationController extends Controller
         if ($shop->open !== null) {
             $shop->open = json_decode($shop->open);
         } else {
-            $shop->open = [];
+            $shop->open = json_decode('{}');
         }
 
         return response()->json(compact("shop"), 200);
@@ -61,9 +61,9 @@ class LocationController extends Controller
             'telephone' => 'required',
         ]);
         $errors = array();
-        if (!isset($request->open) || !is_array($request->open)) {
-            $errors['open'] = ['The open is not valid.'];
-        }
+        // if (!isset($request->open) || !is_array($request->open)) {
+        //     $errors['open'] = ['The open is not valid.'];
+        // }
         if (count($errors) > 0) {
             return response()->json(compact('errors'), 422);
         }
@@ -95,9 +95,9 @@ class LocationController extends Controller
         if ($location === null) {
             $errors['location'] = ['The location is not found.'];
         }
-        if (isset($request->open) && !is_array($request->open)) {
-            $errors['open'] = ['The open is not valid.'];
-        }
+        // if (isset($request->open) && !is_array($request->open)) {
+        //     $errors['open'] = ['The open is not valid.'];
+        // }
         if (count($errors) > 0) {
             return response()->json(compact('errors'), 422);
         }

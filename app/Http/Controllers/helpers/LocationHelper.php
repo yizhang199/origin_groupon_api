@@ -12,7 +12,7 @@ class LocationHelper
             if ($location->open !== null) {
                 $location->open = json_decode($location->open);
             } else {
-                $location->open = [];
+                $location->open = json_decode("{}");
             }
         }
 
