@@ -144,9 +144,21 @@ class OrderHelper
                 $order_item = json_decode(json_encode($order_item));
                 $product_id = $order_item->product_id;
                 if (array_key_exists($product_id, $order_products)) {
-                    array_push($order_products[$product_id], ["product_name" => $order_item->name, "username" => $order->user->username, "date" => $order->fax, "quantity" => $order_item->quantity]);
+                    array_push($order_products[$product_id],
+                        [
+                            "product_name" => $order_item->name,
+                            "username" => $order->user->username,
+                            "date" => $order->fax,
+                            "quantity" => $order_item->quantity,
+                        ]);
                 } else {
-                    $order_products[$product_id] = array(["product_name" => $order_item->name, "username" => $order->user->username, "date" => $order->fax, "quantity" => $order_item->quantity]);
+                    $order_products[$product_id] = array(
+                        [
+                            "product_name" => $order_item->name,
+                            "username" => $order->user->username,
+                            "date" => $order->fax,
+                            "quantity" => $order_item->quantity,
+                        ]);
                 };
             }
         }

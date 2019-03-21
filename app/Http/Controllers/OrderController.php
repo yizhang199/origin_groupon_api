@@ -9,6 +9,7 @@ use App\Order;
 use App\OrderOption;
 use App\OrderProduct;
 use App\Product;
+use App\ProductDiscount;
 use App\User;
 use DateTime;
 use DateTimeZone;
@@ -138,32 +139,38 @@ class OrderController extends Controller
 
         if (isset($request->order_id)) {
             $order = Order::find($request->order_id);
-            $order->invoice_no = $request->invoice_no;
-            $order->store_id = isset($request->store_id) ? $request->store_id : $order->store_id;
-            $order->fax = isset($request->fax) ? $request->fax : $order->fax;
-            $order->payment_method = isset($request->payment_method) ? $request->payment_method : $order->payment_method;
-            $order->total = isset($request->total) ? $request->total : $order->total;
-            $order->date_modified = $today;
-            $order->order_status_id = $request->order_status_id;
-            $order->save();
-        } else {
-            $input = [
-                'invoice_no' => $request->invoice_no,
-                'store_id' => isset($request->store_id) ? $request->store_id : "",
-                'customer_id' => $user->user_id,
-                'fax' => isset($request->fax) ? $request->fax : "",
-                'payment_method' => isset($request->payment_method) ? $request->payment_method : "",
-                'total' => isset($request->total) ? $request->total : "",
-                'date_added' => $today,
-                'date_modified' => $today,
-                'order_status_id' => $request->order_status_id,
-            ];
+            if ($order !== null) {
+                $order->delete();
 
-            $order = Order::create($input);
-            if (isset($request->customerComments)) {
-                $order->comment = $request->customerComments;
-                $order->save();
+                $order_products = $order->products()->get();
+                foreach ($order_products as $order_product) {
+
+                    $target_product = Product::find($order_product->product_id)->increment('quantity', $order_product->quantity);
+                    $target_productDiscount = ProductDiscount::where("product_id", $order_product->product_id)->first();
+                    if ($target_productDiscount !== null) {
+                        $target_productDiscount->increment("quantity", $order_product->quantity);
+                    }
+                    $order_product->delete();
+                }
             }
+        }
+
+        $input = [
+            'invoice_no' => $request->invoice_no,
+            'store_id' => isset($request->store_id) ? $request->store_id : "",
+            'customer_id' => $user->user_id,
+            'fax' => isset($request->fax) ? $request->fax : "",
+            'payment_method' => isset($request->payment_method) ? $request->payment_method : "",
+            'total' => isset($request->total) ? $request->total : "",
+            'date_added' => $today,
+            'date_modified' => $today,
+            'order_status_id' => $request->order_status_id,
+        ];
+
+        $order = Order::create($input);
+        if (isset($request->customerComments)) {
+            $order->comment = $request->customerComments;
+            $order->save();
         }
 
         $order_products = $this->helper->createOrderProducts($request, $order->order_id);

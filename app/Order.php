@@ -145,6 +145,6 @@ class Order extends Model
     }
     public function products()
     {
-        return $this->hasMay('App\OrderProduct', 'order_id', 'order_id');
+        return $this->hasMany('App\OrderProduct', 'order_id', 'order_id');
     }
 }
