@@ -124,6 +124,7 @@ class OrderHelper
         $detailedOrder["picked_date"] = $order->fax;
         $detailedOrder["create_date"] = $order->date_added;
         $detailedOrder["payment_method"] = $order->payment_method;
+        $detailedOrder["customer_id"] = $order->customer_id;
         $detailedOrder["total"] = $order->total;
         $detailedOrder["status_id"] = $order->order_status_id;
         $detailedOrder["status"] = OrderStatus::where('order_status_id', $order->order_status_id)->first()->name;

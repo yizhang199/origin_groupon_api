@@ -123,14 +123,20 @@ class PaymentController extends Controller
     }
 
     //* receive notify from payment api, if success paid, then change order status in database.
-    public function notify(Request $request)
+    public function notify(Request $request, $pay_way)
     {
-        // make reponse body
+
         $dt = new \DateTime("now", new \DateTimeZone('Australia/Sydney'));
         $date_received = $dt->format('y-m-d h:m:s');
-        $decode = $request->all();
-        $message = $decode['Token'];
-        PaymentNotify::create(compact("date_received", "message"));
+        $status = "";
+        $message = "can not find $pay_way";
+        if ($pay_way === 'poli') {
+            $poli = new Poli();
+            $result_array = $poli->handleNotify($request);
+            $message = $result_array["message"];
+            $status = $result_array["status"];
+        }
+        PaymentNotify::create(compact("date_received", "message", "pay_way", 'status'));
 
     }
 
@@ -148,7 +154,7 @@ class PaymentController extends Controller
                 'status' => $response->TransactionStatus,
                 'bill_amount' => $response->PaymentAmount,
                 'paid_amount' => $response->AmountPaid,
-                'transaction_id' => $response->TransactionID,
+                'transaction_id' => $response->TransactionRefNo,
             );
 
             return response()->json(compact("payment_information"), 200);
@@ -161,5 +167,24 @@ class PaymentController extends Controller
         if ($channel === 'wechat' || $channel === 'alipay') {
 
         }
+    }
+
+    public function fetchCanceledOrder(Request $request)
+    {
+        $channel = $request->channel;
+        $payment_id = $request->payment_id;
+
+        if ($channel === 'poli') {
+            $poli = new Poli();
+            $response = $poli->query($payment_id);
+            $response = json_decode(json_encode($response));
+
+            $payment_code = $response->TransactionRefNo;
+
+            $dbOrder = Order::where('payment_code', $payment_code)->first();
+            $order = $this->OrderHelper->makeOrder($dbOrder);
+
+        }
+        return response()->json(compact("order"), 200);
     }
 }

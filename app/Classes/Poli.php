@@ -1,6 +1,8 @@
 <?php
 namespace App\Classes;
 
+use App\Order;
+
 class Poli
 {
 
@@ -20,8 +22,8 @@ class Poli
             "MerchantHomepageURL" => $homepage,
             "SuccessURL" => "$payment_returnUrl/poli",
             "FailureURL" => $homepage,
-            "CancellationURL" => config('app.paymentCancelUrl'),
-            "NotificationURL" => config('app.paymentNotifycationUrl'),
+            "CancellationURL" => config('app.paymentCancelUrl') . "/poli",
+            "NotificationURL" => config('app.paymentNotifycationUrl') . "/poli",
         ];
 
         $ch = curl_init($url);
@@ -54,6 +56,24 @@ class Poli
 
         return $json;
 
+    }
+
+    public function handleNotify($request)
+    {
+        $decode = $request->all();
+        $response = self::query($decode['Token']);
+        $message = json_encode($response);
+        $response = json_decode($message);
+        $status = $response->TransactionStatus;
+        if ($status === 'Completed') {
+            $order = Order::where("payment_code", $response->TransactionRefNo)->first();
+            if ($order !== null) {
+                $order->order_status_id = 2;
+                $order->save();
+            }
+        }
+
+        return compact("message", "status");
     }
 }
 /* example of query response
