@@ -122,7 +122,11 @@ class OrderHelper
         $store = Location::find($order->store_id);
         $detailedOrder["store_name"] = $store->name;
         $detailedOrder["picked_date"] = $order->fax;
-        $detailedOrder["create_date"] = $order->date_added;
+        $tz = "Australia/Sydney";
+        $dt = new \DateTime($order->date_added, new \DateTimeZone($tz));
+
+        $detailedOrder["create_date"] = $dt->format("Y-m-d");
+
         $detailedOrder["payment_method"] = $order->payment_method;
         $detailedOrder["customer_id"] = $order->customer_id;
         $detailedOrder["total"] = $order->total;

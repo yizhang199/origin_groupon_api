@@ -59,7 +59,6 @@ class Product extends Model
         'length_class_id',
         'subtract',
         'minimum',
-
         'viewed',
         'date_added',
         'date_modified',
