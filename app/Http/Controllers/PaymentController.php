@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Classes\Paypal;
 use App\Classes\Poli;
 use App\Classes\Redpayments;
 use App\Http\Controllers\helpers\OrderHelper;
@@ -75,26 +74,25 @@ class PaymentController extends Controller
         $approvel_url = "";
         $payment_id = "";
         $order_status = "";
-
-        $request->channel = "POLI";
+        $testing_message = "";
 
         # Paypal
-        if ($request->channel === "Paypal") {
-            $paypal = new Paypal();
-            $response = $paypayl->create($request);
+        // if ($request->channel === "Paypal") {
+        //     $paypal = new Paypal();
+        //     $response = $paypayl->create($request);
 
-            // return errors when fail
-            if (!isset($response->state)) {
-                return response()->json(["status" => "error"]);
-            }
-            foreach ($response->links as $link) {
-                if ($link->rel === "approval_url") {
-                    $approvel_url = $link->href;
-                }
-            }
-            $order_status = $response->state;
-            $payment_id = $response->id;
-        }
+        //     // return errors when fail
+        //     if (!isset($response->state)) {
+        //         return response()->json(["status" => "error"]);
+        //     }
+        //     foreach ($response->links as $link) {
+        //         if ($link->rel === "approval_url") {
+        //             $approvel_url = $link->href;
+        //         }
+        //     }
+        //     $order_status = $response->state;
+        //     $payment_id = $response->id;
+        // }
 
         if ($request->channel === "POLI") {
             $poli = new Poli();
@@ -108,8 +106,14 @@ class PaymentController extends Controller
         if ($request->channel === "WECHAT" || $request->channel === "ALIPAY") {
             $redpayments = new Redpayments();
             $response = $redpayments->create($request);
+            $order_status = $response->code == 0 ? "success" : "fail";
+            if ($response->code == 0) {
+                $data = json_decode(json_encode($response->data));
+                $approvel_url = $data->qrCode;
+                $payment_id = $data->orderNo;
+            }
 
-            return response()->json($response, 200);
+            $testing_message = json_encode($response);
         }
 
         $order->payment_code = $payment_id;
@@ -119,6 +123,7 @@ class PaymentController extends Controller
             "status" => $order_status,
             "approvel_url" => $approvel_url,
             "payment_id" => $payment_id,
+            "message" => $testing_message,
         ], 200);
     }
 
@@ -164,7 +169,7 @@ class PaymentController extends Controller
 
         }
 
-        if ($channel === 'wechat' || $channel === 'alipay') {
+        if ($channel === 'WECHAT' || $channel === 'ALIPAY') {
 
         }
     }

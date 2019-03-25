@@ -16,19 +16,19 @@ class Redpayments
     {
         // read input
         $requestBody = [
-            "amount" => $request->amount,
+            "amount" => $request->total,
             "channel" => $request->channel,
-            "currency" => $request->currency,
-            "item" => $request->item,
-            "mchNo" => $request->mchNo,
-            "mchOrderNo" => $request->mchOrderNo,
-            "notifyUrl" => $request->notifyUrl,
-            "params" => $request->params,
-            "payWay" => $request->payWay,
+            "currency" => $request->input("currency", "AUD"),
+            "item" => $request->input("item", config("redpayments.items")),
+            "mchNo" => config("redpayments.mchNo"),
+            "mchOrderNo" => $request->invoice_no,
+            "notifyUrl" => config("app.paymentNotifycationUrl", "/$request->channel"),
+            "params" => $request->input("params", config("redpayments.params")),
+            "payWay" => $request->input("payway", config("redpayments.payWay")),
             "quantity" => $request->quantity,
-            "returnUrl" => $request->returnUrl,
-            "storeNo" => $request->storeNo,
-            "timestamp" => $request->timestamp,
+            "returnUrl" => config("app.returnUrl") . "/$request->channel",
+            "storeNo" => config("redpayments.storeNo"),
+            "timestamp" => $request->timestamps,
             "version" => $this->version,
         ];
         // add sign
@@ -54,7 +54,7 @@ class Redpayments
         return $responseBody;
     }
 
-    public function getSign($requestBody)
+    public function getSign($params)
     {
         $str = '';
         ksort($params);
