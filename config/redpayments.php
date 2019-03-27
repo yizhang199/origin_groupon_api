@@ -2,7 +2,7 @@
 return [
     'key' => env('REDPAYMENTS_KEY', ''),
     "version" => env("REDPAYMENTS_VERSION", ""),
-    "createUrl" => env("RED_PAYMENTS_CREATE_URL", "https: //service.redpayments.com.au/pay/gateway/create-order"),
+    "createUrl" => env("RED_PAYMENTS_CREATE_URL", "https://service.redpayments.com.au/pay/gateway/create-order"),
     "queryUrl" => env("RED_PAYMENTS_QUERY_URL"),
     "test_createUrl" => "https://dev-service.redpayments.com.au/pay/gateway/create-order",
 
