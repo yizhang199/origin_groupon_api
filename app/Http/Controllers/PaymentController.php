@@ -27,6 +27,7 @@ class PaymentController extends Controller
         //Todo: validation
 
         //1. create order
+
         $dt = new \DateTime("now", new \DateTimeZone('Australia/Sydney'));
         $today = $dt->format('y-m-d');
 
@@ -135,12 +136,19 @@ class PaymentController extends Controller
         $date_received = $dt->format('y-m-d h:m:s');
         $status = "";
         $message = "can not find $pay_way";
+        $result_array = array();
         if ($pay_way === 'poli') {
             $poli = new Poli();
             $result_array = $poli->handleNotify($request);
-            $message = $result_array["message"];
-            $status = $result_array["status"];
         }
+        if ($pay_way === 'WECHAT' || $pay_way === 'ALIPAY') {
+            $redpayments = new Redpayments();
+            $result_array = $redpayments->handleNotify($request);
+        }
+
+        $message = $result_array["message"];
+        $status = $result_array["status"];
+
         PaymentNotify::create(compact("date_received", "message", "pay_way", 'status'));
 
     }
@@ -149,6 +157,7 @@ class PaymentController extends Controller
     {
         $channel = $request->channel;
         $payment_id = $request->payment_id;
+        $payment_information = array();
         if ($channel === 'poli') {
             $poli = new Poli();
             $response = $poli->query($payment_id);
@@ -161,17 +170,28 @@ class PaymentController extends Controller
                 'paid_amount' => $response->AmountPaid,
                 'transaction_id' => $response->TransactionRefNo,
             );
+        }
 
-            return response()->json(compact("payment_information"), 200);
+        if ($channel === 'WECHAT' || $channel === 'ALIPAY') {
+            $redpayments = new Redpayments();
+            $response = $redpayments->query($payment_id);
+            $response = json_decode(json_encode($response));
+            $payment_information = array(
+                'error_code' => $response->code,
+                'date_time' => $response->data->paidTime,
+                'status' => $response->data->resultCode,
+                'bill_amount' => $response->orderAmount,
+                'paid_amount' => $reponse->data->orderAmount,
+                'transaction_id' => $response->orderNo,
+            );
         }
 
         if ($channel === 'paypal') {
 
         }
 
-        if ($channel === 'WECHAT' || $channel === 'ALIPAY') {
+        return response()->json(compact("payment_information"), 200);
 
-        }
     }
 
     public function fetchCanceledOrder(Request $request)
@@ -183,12 +203,9 @@ class PaymentController extends Controller
             $poli = new Poli();
             $response = $poli->query($payment_id);
             $response = json_decode(json_encode($response));
-
             $payment_code = $response->TransactionRefNo;
-
             $dbOrder = Order::where('payment_code', $payment_code)->first();
             $order = $this->OrderHelper->makeOrder($dbOrder);
-
         }
         return response()->json(compact("order"), 200);
     }

@@ -54,6 +54,59 @@ class Redpayments
         return $responseBody;
     }
 
+    public function query($paymentId)
+    {
+
+        $order = Order::where('payment_code', $paymentId)->first();
+        $date = new \DateTime(new \DateTimeZone("Australia/Sydney"));
+        $requestBody = [
+            "mchNo" => config("redpayments.mchNo"),
+            "mchOrderNo" => $order->invoice_no,
+            "orderNo" => $paymentId,
+            "timestamp" => $date->getTimestamp(),
+            "version" => $this->version,
+        ];
+        // add sign
+        $requestBody["sign"] = self::getSign($requestBody);
+
+        // call web api
+        $data_string = json_encode($requestBody);
+
+        $url = config("redpayments.queryUrl");
+
+        $curl = curl_init($url);
+
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data_string);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Content-Length: ' . strlen($data_string)));
+
+        $curl_response = curl_exec($curl);
+
+        // make reposnse object
+        $responseBody = json_decode($curl_response);
+        // return reponse
+        return $responseBody;
+
+        // Todo:: finish the logic
+
+    }
+
+    public function handleNotify($request)
+    {
+        $decode = $request->all();
+        $message = json_encode($request);
+        $status = $decode->status;
+        if ($status == 'SUCCEEDED') {
+            $order = Order::where("payment_code", $response->orderNo)->first();
+            if ($order !== null) {
+                $order->order_status_id = 2;
+                $order->save();
+            }
+        }
+        return compact("message", "status");
+    }
+
     public function getSign($params)
     {
         $str = '';
