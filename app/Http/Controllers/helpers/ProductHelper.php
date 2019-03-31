@@ -54,7 +54,6 @@ class ProductHelper
                 $image_path = config("app.baseurl") . $product["image"];
 
                 if ($product["image"] === null || $product["image"] === "" || !file_exists($_SERVER['DOCUMENT_ROOT'] . $image_path)) {
-                    die(json_encode($_SERVER['DOCUMENT_ROOT'] . $image_path));
                     $product["image"] = url('/') . '/images/products/default.jpeg';
                 } else {
 
